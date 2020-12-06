@@ -31,9 +31,13 @@
 (menu-bar-mode 0)
 ;; end striped
 
+(setq display-line-numbers 'relative)
+
 ;; default font
 (set-face-attribute 'default nil
 		    :family "Liberation Mono"
 		    :height 140
 		    :weight 'normal
 		    :width 'normal)
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(load custom-file)
