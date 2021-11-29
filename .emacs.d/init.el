@@ -35,7 +35,7 @@
 
 ;; default font
 (set-face-attribute 'default nil
-		    :family "Liberation Mono"
+		    :family "PT Mono"
 		    :height 140
 		    :weight 'normal
 		    :width 'normal)

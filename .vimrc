@@ -1,5 +1,6 @@
 " use modern vim
 set nocompatible
+set encoding=utf-8
 " use macbook delete as backspcace
 set backspace=indent,eol,start 
 " syntax highlighting
