@@ -4,6 +4,10 @@
 			 ("org" . "https://orgmode.org/elpa/")
 			 ("elpa" . "https://elpa.gnu.org/packages/")))
 (package-initialize)
+
+(when (memq window-system '(mac ns x))
+(exec-path-from-shell-initialize))
+
 (unless package-archive-contents
   (package-refresh-contents))
 
@@ -35,14 +39,18 @@
 
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
+
 (setq backup-directory-alist `(("." . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 
+(setq native-comp-async-report-warnings-errors nil)
+
 (set-face-attribute 'default nil
-		  :family "Andale Mono"
-		  :height 140
-		  :weight 'normal
-		  :width 'normal)
+		    ;; :family "Andale Mono"
+		    :family "unifont"
+		    :height 160
+		    :weight 'normal
+		    :width 'normal)
 
 (use-package ivy
   :diminish
@@ -107,8 +115,8 @@
     :prefix "SPC"
     :global-prefix "C-SPC")
   (rune/leader-keys
-   "t" '(:ignore t :which-key "toggles")
-   "tt" '(counsel-load-theme :which-key "choose theme")))
+    "t" '(:ignore t :which-key "toggles")
+    "tt" '(counsel-load-theme :which-key "choose theme")))
 
 (setq auth-sources '("~/.authinfo"))
 (use-package magit)
@@ -124,7 +132,7 @@
 
 (use-package org
   :config
-  (setq org-ellipsis " ⬇"
+  (setq org-ellipsis "⬇"
 	org-hide-emphasis-markers t))
 
 (use-package org-bullets
@@ -137,7 +145,7 @@
 
 (defun efs/org-babel-tangle-config()
   (when (string-equal (buffer-file-name)
-		      (expand-file-name "~/config/config.org"))
+		      (expand-file-name "./emacs.org"))
     (let ((org-confirm-babel-evaluate nil))
       (org-babel-tangle))))
 (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
