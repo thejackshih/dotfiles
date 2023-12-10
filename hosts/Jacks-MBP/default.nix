@@ -4,8 +4,8 @@
   nix = {
     package = pkgs.nixFlakes;
     extraOptions = ''
-experimental-features = nix-command flakes
-'';
+      experimental-features = nix-command flakes
+    '';
   };
 
   programs.zsh.enable = true;
@@ -13,15 +13,33 @@ experimental-features = nix-command flakes
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
 
+  users.users.jack = {
+    name = "jack";
+    home = "/Users/jack";
+  };
+
+  home-manager.users.jack = {pkgs, ...}: {
+    home.stateVersion = "23.11";
+    home.packages = with pkgs; [
+      coreutils
+      coreutils-prefixed
+      emacs29-pgtk
+    ];
+  };
+
   fonts = {
     fontDir.enable = true;
-    fonts = [];
+    fonts = with pkgs; [];
   };
 
   system = {
     defaults = {
       NSGlobalDomain = {
         _HIHideMenuBar = false;
+        AppleFontSmoothing = 0;
+        KeyRepeat = 2;
+        InitialKeyRepeat = 15;
+        ApplePressAndHoldEnabled = false;
       };
       dock = {
         autohide = true;
@@ -32,38 +50,36 @@ experimental-features = nix-command flakes
       remapCapsLockToControl = true;
     };
   };
-  
-  
+
+
   homebrew = {
     enable = true;
     onActivation.autoUpdate = true;
     onActivation.cleanup = "uninstall";
 
     brews = [
-      {
-        name = "emacs-plus@30";
-        args = [];
-        link = true;
-      }
+      "fvm"
+      "cocoapods"
+      "dart"
     ];
     casks = [
       "1password"
       "adobe-digital-editions"
+      "betterdisplay"
       "calibre"
-      "alfred"
-      "rectangle"
-      "font-ibm-plex"
+      "raycast"
+      "virtual-desktop-streamer"
+      "android-studio"
+      "google-chrome"
+      "utm"
     ];
     taps = [
       "d12frosted/emacs-plus"
+      "dart-lang/dart"
+      "leoafarias/fvm"
       "homebrew/bundle"
-      "homebrew/cask"
-      "homebrew/cask-drivers"
       "homebrew/cask-fonts"
-      "homebrew/core"
       "homebrew/services"
     ];
   };
-  
 }
-    
