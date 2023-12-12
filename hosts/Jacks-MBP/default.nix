@@ -29,11 +29,16 @@
       vim = {
         source = ../../vim/vimrc;
         target = ".vimrc";
-        enable = false;
+        enable = true;
       };
       neovim = {
         source = ../../nvim/init.vim;
         target = ".config/nvim/init.vim";
+        enable = true;
+      };
+      emacs = {
+        source = ../../emacs/new_init.el;
+        target = ".emacs.d/init.el";
         enable = true;
       };
     };
