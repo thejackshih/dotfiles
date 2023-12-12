@@ -25,12 +25,26 @@
       coreutils-prefixed
       emacs29-pgtk
     ];
+    home.file = {
+      vim = {
+        source = ../../vim/vimrc;
+        target = ".vimrc";
+        enable = false;
+      };
+      neovim = {
+        source = ../../nvim/init.vim;
+        target = ".config/nvim/init.vim";
+        enable = true;
+      };
+    };
   };
 
   fonts = {
     fontDir.enable = true;
     fonts = with pkgs; [];
   };
+
+  networking.hostName = "Jacks-MacBook-Pro";
 
   system = {
     defaults = {

@@ -14,7 +14,7 @@
     let
       overlays = [emacs-overlay.overlay];
     in {
-      darwinConfigurations."Jacks-MBP" = darwin.lib.darwinSystem {
+      darwinConfigurations."Jacks-MacBook-Pro" = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         modules = [
           home-manager.darwinModules.home-manager
