@@ -42,6 +42,14 @@
         enable = true;
       };
     };
+    programs = {
+      zsh.enable = true;
+      direnv = {
+        enable = true;
+        enableZshIntegration = true;
+        nix-direnv.enable = true;
+      };
+    };
   };
 
   fonts = {
@@ -91,6 +99,8 @@
       "android-studio"
       "google-chrome"
       "utm"
+      "font-fira-code"
+      "microsoft-edge"
     ];
     taps = [
       "d12frosted/emacs-plus"
