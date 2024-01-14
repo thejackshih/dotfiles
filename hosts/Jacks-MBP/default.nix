@@ -95,12 +95,9 @@
       "betterdisplay"
       "calibre"
       "raycast"
-      "virtual-desktop-streamer"
       "android-studio"
       "google-chrome"
-      "utm"
       "font-fira-code"
-      "microsoft-edge"
     ];
     taps = [
       "d12frosted/emacs-plus"
