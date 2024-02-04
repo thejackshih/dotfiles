@@ -36,7 +36,7 @@
 ;; default font
 (set-face-attribute 'default nil
 		    :family "PT Mono"
-		    :height 140
+		    :height 120
 		    :weight 'normal
 		    :width 'normal)
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))

@@ -28,11 +28,6 @@
 (set-fringe-mode 10)
 (menu-bar-mode -1)
 
-;; (when (string= system-type "darwin")
-;;   (setq dired-use-ls-dired t
-;;         insert-directory-program "/etc/profiles/per-user/jack/bin/gls"
-;;         dired-listing-switches "-aBhl --group-directories-first"))
-
 
 (defvar --custom-el (concat user-emacs-directory "custom.el"))
 (if (not (file-exists-p --custom-el))
@@ -48,8 +43,7 @@
 
 
 (set-face-attribute 'default nil
-		    :family "fira code"
-		    :height 140
+		    :height 120
 		    :weight 'normal
 		    :width 'normal)
 
@@ -70,7 +64,8 @@
 (use-package markdown-mode
   :ensure t)
 
-(use-package magit)
+(use-package magit
+  :ensure t)
 
 ;; (use-package eglot
 ;;   :ensure t
@@ -85,21 +80,6 @@
 (use-package vterm
   :ensure t)
 
-(use-package nimbus-theme
-  :ensure t)
-
-(use-package ef-themes
-  :ensure t)
-
-(use-package monokai-theme
-  :ensure t)
-
-(use-package nordic-night-theme
-  :ensure t)
-
-(use-package darktooth-theme
-  :ensure t)
-
 (use-package corfu
   :ensure t
   :config
@@ -108,9 +88,6 @@
   )
 
 (use-package org
-  :ensure t)
-
-(use-package hima-theme
   :ensure t)
 
 (use-package ox-hugo
@@ -136,10 +113,7 @@
 (use-package nord-theme
   :ensure t)
 
-(use-package flucui-themes
-  :ensure t)
-
-(use-package nimbus-theme
+(use-package solarized-theme
   :ensure t)
 
 ;; This assumes you've installed the package via MELPA.
@@ -252,3 +226,11 @@
                           (lsp))))  ; or lsp-deferred
 
 (envrc-global-mode)
+
+(use-package nov-xwidget
+  :demand t
+  :after nov
+  :config
+  (define-key nov-mode-map (kbd "o") 'nov-xwidget-view)
+  (add-hook 'nov-mode-hook 'nov-xwidget-inject-all-files)
+  )
