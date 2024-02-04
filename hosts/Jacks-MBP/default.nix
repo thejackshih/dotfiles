@@ -22,40 +22,39 @@
     home.stateVersion = "23.11";
     home.packages = with pkgs; [
       coreutils
-      coreutils-prefixed
-      emacs29-pgtk
+      emacs-unstable-pgtk
     ];
     home.file = {
-      vim = {
-        source = ../../vim/vimrc;
-        target = ".vimrc";
-        enable = true;
-      };
-      neovim = {
-        source = ../../nvim/init.vim;
-        target = ".config/nvim/init.vim";
-        enable = true;
-      };
+      # vim = {
+      #   source = ../../vim/vimrc;
+      #   target = ".vimrc";
+      #   enable = true;
+      # };
+      # neovim = {
+      #   source = ../../nvim/init.vim;
+      #   target = ".config/nvim/init.vim";
+      #   enable = true;
+      # };
       emacs = {
         source = ../../emacs/new_init.el;
         target = ".emacs.d/init.el";
-        enable = true;
+        enable = false;
       };
     };
-    programs = {
-      zsh.enable = true;
-      direnv = {
-        enable = true;
-        enableZshIntegration = true;
-        nix-direnv.enable = true;
-      };
-    };
+    # programs = {
+    #   zsh.enable = true;
+    #   direnv = {
+    #     enable = true;
+    #     enableZshIntegration = true;
+    #     nix-direnv.enable = true;
+    #   };
+    # };
   };
 
-  fonts = {
-    fontDir.enable = true;
-    fonts = with pkgs; [];
-  };
+  # fonts = {
+  #   fontDir.enable = true;
+  #   fonts = with pkgs; [];
+  # };
 
   networking.hostName = "Jacks-MacBook-Pro";
 
@@ -85,9 +84,9 @@
     onActivation.cleanup = "uninstall";
 
     brews = [
-      "fvm"
-      "cocoapods"
-      "dart"
+      # "fvm"
+      # "cocoapods"
+      # "dart"
     ];
     casks = [
       "1password"
@@ -95,14 +94,11 @@
       "betterdisplay"
       "calibre"
       "raycast"
-      "android-studio"
-      "google-chrome"
       "font-fira-code"
     ];
     taps = [
-      "d12frosted/emacs-plus"
-      "dart-lang/dart"
-      "leoafarias/fvm"
+      # "dart-lang/dart"
+      # "leoafarias/fvm"
       "homebrew/bundle"
       "homebrew/cask-fonts"
       "homebrew/services"
