@@ -36,9 +36,9 @@
       #   enable = true;
       # };
       emacs = {
-        source = ../../emacs/new_init.el;
+        source = ../../ext/init.el;
         target = ".emacs.d/init.el";
-        enable = false;
+        enable = true;
       };
     };
     # programs = {
