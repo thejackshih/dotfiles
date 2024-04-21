@@ -1,13 +1,12 @@
 { pkgs, ...}:
 {
-  services.nix-daemon.enable = true;
   nix = {
-    package = pkgs.nixFlakes;
+    package = pkgs.nixVersions.nix_2_21;
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
   };
-
+  services.nix-daemon.enable = true;
   programs.zsh.enable = true;
 
   home-manager.useGlobalPkgs = true;
@@ -31,7 +30,7 @@
       #   enable = true;
       # };
       # neovim = {
-      #   source = ../../nvim/init.vim;
+      #   source = ../../nvㄍim/init.vim;
       #   target = ".config/nvim/init.vim";
       #   enable = true;
       # };
@@ -41,14 +40,14 @@
         enable = true;
       };
     };
-    # programs = {
-    #   zsh.enable = true;
-    #   direnv = {
-    #     enable = true;
-    #     enableZshIntegration = true;
-    #     nix-direnv.enable = true;
-    #   };
-    # };
+    programs = {
+      zsh.enable = true;
+      direnv = {
+        enable = true;
+        enableZshIntegration = true;
+        nix-direnv.enable = true;
+      };
+    };
   };
 
   # fonts = {
