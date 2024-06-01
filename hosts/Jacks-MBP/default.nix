@@ -1,7 +1,7 @@
 { pkgs, ...}:
 {
   nix = {
-    package = pkgs.nixVersions.nix_2_21;
+    package = pkgs.nixVersions.latest;
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
@@ -18,7 +18,7 @@
   };
 
   home-manager.users.jack = {pkgs, ...}: {
-    home.stateVersion = "23.11";
+    home.stateVersion = "24.05";
     home.packages = with pkgs; [
       coreutils
       emacs-unstable-pgtk
