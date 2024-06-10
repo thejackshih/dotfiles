@@ -9,53 +9,17 @@
   services.nix-daemon.enable = true;
   programs.zsh.enable = true;
 
-  home-manager.useGlobalPkgs = true;
-  home-manager.useUserPackages = true;
-
   users.users.jack = {
     name = "jack";
     home = "/Users/jack";
   };
 
-  home-manager.users.jack = {pkgs, ...}: {
-    home.stateVersion = "24.05";
-    home.packages = with pkgs; [
-      coreutils
-      emacs-unstable-pgtk
-    ];
-    home.file = {
-      # vim = {
-      #   source = ../../vim/vimrc;
-      #   target = ".vimrc";
-      #   enable = true;
-      # };
-      # neovim = {
-      #   source = ../../nvㄍim/init.vim;
-      #   target = ".config/nvim/init.vim";
-      #   enable = true;
-      # };
-      emacs = {
-        source = ../../ext/init.el;
-        target = ".emacs.d/init.el";
-        enable = true;
-      };
-    };
-    programs = {
-      zsh.enable = true;
-      direnv = {
-        enable = true;
-        enableZshIntegration = true;
-        nix-direnv.enable = true;
-      };
-    };
-  };
+  networking.hostName = "Jacks-MacBook-Pro";
 
   # fonts = {
   #   fontDir.enable = true;
   #   fonts = with pkgs; [];
   # };
-
-  networking.hostName = "Jacks-MacBook-Pro";
 
   system = {
     defaults = {
@@ -68,6 +32,11 @@
       };
       dock = {
         autohide = true;
+        mru-spaces = false;
+        orientation = "left";
+        persistent-apps = [
+          "/System/Applications/Launchpad.app"
+        ]; # need to restart after apply
       };
     };
     keyboard = {
@@ -103,4 +72,42 @@
       "homebrew/services"
     ];
   };
+
+
+  home-manager.useGlobalPkgs = true;
+  home-manager.useUserPackages = true;
+  home-manager.users.jack = {pkgs, ...}: {
+    home.stateVersion = "24.05";
+    home.packages = with pkgs; [
+      coreutils
+      emacs-unstable-pgtk
+    ];
+    home.file = {
+      # vim = {
+      #   source = ../../vim/vimrc;
+      #   target = ".vimrc";
+      #   enable = true;
+      # };
+      # neovim = {
+      #   source = ../../nvㄍim/init.vim;
+      #   target = ".config/nvim/init.vim";
+      #   enable = true;
+      # };
+      emacs = {
+        source = ../../ext/init.el;
+        target = ".emacs.d/init.el";
+        enable = true;
+      };
+    };
+    programs = {
+      zsh.enable = true;
+      direnv = {
+        enable = true;
+        enableZshIntegration = true;
+        nix-direnv.enable = true;
+      };
+    };
+  };
+
+  
 }
