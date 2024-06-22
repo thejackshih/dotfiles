@@ -197,7 +197,7 @@
 *** font setup
 #+begin_src emacs-lisp :tangle ./ext/init.el
   (set-face-attribute 'default nil
-		      :family "fira code"
+		      :family "0xProto"
 		      :height 120
 		      :weight 'normal
 		      :width 'normal)
@@ -265,7 +265,7 @@
     :ensure t)
 #+end_src
 *** theme
-#+begin_src emacs-lisp :tangle ./ext/init.el
+#+begin_src emacs-lisp
   (use-package nord-theme
     :ensure t
     :config
