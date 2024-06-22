@@ -16,10 +16,10 @@
 
   networking.hostName = "Jacks-MacBook-Pro";
 
-  # fonts = {
-  #   fontDir.enable = true;
-  #   fonts = with pkgs; [];
-  # };
+  fonts.packages = with pkgs;[
+    _0xproto
+    _0xpropo
+  ];
 
   system = {
     defaults = {
@@ -33,10 +33,10 @@
       dock = {
         autohide = true;
         mru-spaces = false;
-        orientation = "left";
+        orientation = "bottom";
         persistent-apps = [
           "/System/Applications/Launchpad.app"
-        ]; # need to restart after apply
+        ];
       };
     };
     keyboard = {
@@ -51,25 +51,19 @@
     onActivation.autoUpdate = true;
     onActivation.cleanup = "uninstall";
 
-    brews = [
-      # "fvm"
-      # "cocoapods"
-      # "dart"
-    ];
+    brews = [];
     casks = [
       "1password"
       "adobe-digital-editions"
       "betterdisplay"
       "calibre"
       "raycast"
-      "font-fira-code"
     ];
     taps = [
-      # "dart-lang/dart"
-      # "leoafarias/fvm"
       "homebrew/bundle"
       "homebrew/cask-fonts"
       "homebrew/services"
+      "d12frosted/emacs-plus"
     ];
   };
 
@@ -80,19 +74,9 @@
     home.stateVersion = "24.05";
     home.packages = with pkgs; [
       coreutils
-      emacs-unstable-pgtk
+      emacs-pgtk
     ];
     home.file = {
-      # vim = {
-      #   source = ../../vim/vimrc;
-      #   target = ".vimrc";
-      #   enable = true;
-      # };
-      # neovim = {
-      #   source = ../../nvㄍim/init.vim;
-      #   target = ".config/nvim/init.vim";
-      #   enable = true;
-      # };
       emacs = {
         source = ../../ext/init.el;
         target = ".emacs.d/init.el";
@@ -108,6 +92,4 @@
       };
     };
   };
-
-  
 }
