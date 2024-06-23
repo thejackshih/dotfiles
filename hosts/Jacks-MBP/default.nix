@@ -71,7 +71,7 @@
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
   home-manager.users.jack = {pkgs, ...}: {
-    home.stateVersion = "24.05";
+    home.stateVersion = "24.11";
     home.packages = with pkgs; [
       coreutils
       emacs-pgtk
