@@ -259,7 +259,10 @@
     :ensure t)
 #+end_src
 *** org mode
+to install latest org-mode [[https://github.com/jwiegley/use-package/issues/319#issuecomment-845214233][reference]]
 #+begin_src emacs-lisp :tangle ./ext/init.el
+  (assq-delete-all 'org package--builtins)
+  (assq-delete-all 'org package--builtin-versions)
   (use-package org
     :ensure t)
 #+end_src
