@@ -1,6 +1,7 @@
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
 			   ("elpa" . "https://elpa.gnu.org/packages/")
 			   ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
+(setq package-install-upgrade-built-in t)
 (package-initialize)
 
 (unless package-archive-contents
@@ -91,7 +92,13 @@
 (assq-delete-all 'org package--builtins)
 (assq-delete-all 'org package--builtin-versions)
 (use-package org
-  :ensure t)
+  :ensure t
+  :config
+  (global-set-key (kbd "C-c l") #'org-store-link)
+  (global-set-key (kbd "C-c a") #'org-agenda)
+  (global-set-key (kbd "C-c c") #'org-capture)
+  (setq org-log-done 'time)
+  )
 
 ;; Enable rich annotations using the Marginalia package
 (use-package marginalia

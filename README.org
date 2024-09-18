@@ -148,8 +148,9 @@
 *** package
 #+begin_src emacs-lisp :tangle ./ext/init.el
   (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-			   ("elpa" . "https://elpa.gnu.org/packages/")
-			   ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
+  			   ("elpa" . "https://elpa.gnu.org/packages/")
+  			   ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
+  (setq package-install-upgrade-built-in t)
   (package-initialize)
 
   (unless package-archive-contents
@@ -264,7 +265,13 @@ to install latest org-mode [[https://github.com/jwiegley/use-package/issues/319#
   (assq-delete-all 'org package--builtins)
   (assq-delete-all 'org package--builtin-versions)
   (use-package org
-    :ensure t)
+    :ensure t
+    :config
+    (global-set-key (kbd "C-c l") #'org-store-link)
+    (global-set-key (kbd "C-c a") #'org-agenda)
+    (global-set-key (kbd "C-c c") #'org-capture)
+    (setq org-log-done 'time)
+    )
 #+end_src
 *** theme
 #+begin_src emacs-lisp

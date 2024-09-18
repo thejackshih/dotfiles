@@ -22,6 +22,7 @@
   ];
 
   system = {
+    stateVersion = 5;
     defaults = {
       NSGlobalDomain = {
         _HIHideMenuBar = false;
