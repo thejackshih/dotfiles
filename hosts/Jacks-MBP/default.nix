@@ -19,6 +19,7 @@
   fonts.packages = with pkgs;[
     _0xproto
     _0xpropo
+    departure-mono
   ];
 
   system = {
@@ -59,6 +60,7 @@
       "betterdisplay"
       "calibre"
       "raycast"
+      "font-cubic-11"
     ];
     taps = [
       "homebrew/bundle"
@@ -75,7 +77,7 @@
     home.stateVersion = "24.11";
     home.packages = with pkgs; [
       coreutils
-      emacs-pgtk
+      emacs-unstable
     ];
     home.file = {
       emacs = {
