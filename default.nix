@@ -34,6 +34,7 @@ in
 
   system = {
     stateVersion = 5;
+    primaryUser = "jack";
     defaults = {
       NSGlobalDomain = {
         _HIHideMenuBar = false;
@@ -49,6 +50,9 @@ in
         persistent-apps = [
           "/System/Applications/Launchpad.app"
         ];
+	persistent-others = [];
+	show-recents = false;
+	wvous-br-corner = 1;
       };
     };
     keyboard = {
@@ -75,9 +79,6 @@ in
       "multiviewer-for-f1"
     ];
     taps = [
-      "homebrew/bundle"
-      "homebrew/cask-fonts"
-      "homebrew/services"
       "d12frosted/emacs-plus"
     ];
   };
