@@ -1,58 +1,84 @@
-{ ... }:
+{ lib, config, options, pkgs, ... }:
 let
   sources = import ./npins;
-  pkgs = import sources.nixpkgs {};
   home-manager-nix-darwin-module = (import sources.home-manager {}).path + "/nix-darwin";
 in
 {
   imports = [home-manager-nix-darwin-module];
+
+  nixpkgs = {
+    source = sources.nixpkgs;
+  };
+
   nix = {
     package = pkgs.nixVersions.latest;
+    channel.enable = false;
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
     nixPath = [
-      "nixpkgs=${sources.nixpkgs.url}"
-      "darwin=${sources.nix-darwin.outPath.outPath}"
-      "darwin-config=${builtins.toString ./. + "/default.nix"}"
+      {
+        nixpkgs = "${sources.nixpkgs.url}";
+        darwin = "${sources.nix-darwin.outPath.outPath}";
+        darwin-config = "${config.environment.darwinConfig}";
+      }
     ];
   };
 
-  programs.zsh.enable = true;
-
-  users.users.jack = {
-    name = "jack";
-    home = "/Users/jack";
+  environment = {
+    darwinConfig = "${builtins.toString ./. + "/default.nix"}";
+    shells = [
+      pkgs.zsh
+    ];
   };
 
-  networking.hostName = "Jacks-MacBook-Pro";
-
-  fonts.packages = with pkgs;[
-    fira
-    fira-code
-  ];
+  networking = {
+    hostName = "Jacks-MacBook-Pro";
+  };
 
   system = {
-    stateVersion = 5;
+    stateVersion = 6;
     primaryUser = "jack";
     defaults = {
       NSGlobalDomain = {
         _HIHideMenuBar = false;
         AppleFontSmoothing = 0;
-        KeyRepeat = 2;
-        InitialKeyRepeat = 15;
         ApplePressAndHoldEnabled = false;
+        InitialKeyRepeat = 15;
+        KeyRepeat = 2;
+	      "com.apple.trackpad.scaling" = 1.5;
+      };
+      WindowManager = {
+        EnableTiledWindowMargins = false;
       };
       dock = {
         autohide = true;
+        autohide-time-modifier = 0.3;
+        expose-animation-duration = null;
+        launchanim = true;
         mru-spaces = false;
         orientation = "bottom";
         persistent-apps = [
           "/System/Applications/Launchpad.app"
         ];
-	persistent-others = [];
-	show-recents = false;
-	wvous-br-corner = 1;
+	      persistent-others = [];
+        tilesize = 32;
+	      show-recents = false;
+	      wvous-br-corner = 1;
+      };
+      finder = {
+        _FXSortFoldersFirst = true;
+        AppleShowAllExtensions = true;
+	      AppleShowAllFiles = true;
+	      FXEnableExtensionChangeWarning = false;
+	      FXPreferredViewStyle = "clmv";
+	      ShowPathbar = true;
+      };
+      menuExtraClock = {
+        Show24Hour = true;
+        ShowAMPM = false;
+	      ShowDate = 2;
+	      ShowDayOfWeek = false;
       };
     };
     keyboard = {
@@ -61,51 +87,73 @@ in
     };
   };
 
-
   homebrew = {
     enable = true;
-    onActivation.autoUpdate = true;
-    onActivation.cleanup = "uninstall";
-
+    onActivation = {
+      autoUpdate = true;
+      cleanup = "uninstall";
+    };
+    taps = [
+      "d12frosted/emacs-plus"
+    ];
     brews = [];
     casks = [
       "1password"
       "adobe-digital-editions"
-      "betterdisplay"
       "calibre"
-      "raycast"
-      "sidequest"
-      "surfshark"
       "multiviewer-for-f1"
-    ];
-    taps = [
-      "d12frosted/emacs-plus"
+      "surfshark"
     ];
   };
 
-
-  home-manager.useGlobalPkgs = true;
-  home-manager.useUserPackages = true;
-  home-manager.users.jack = {pkgs, ...}: {
-    home.stateVersion = "24.11";
-    home.packages = with pkgs; [
-      coreutils
-      npins
-      emacs
+  fonts = {
+    packages = with pkgs;[
+      _0xproto
     ];
-    home.file = {
-      emacs = {
-        source = ../../ext/init.el;
-        target = ".emacs.d/init.el";
-        enable = false;
-      };
+  };
+
+  users = {
+    users.jack = {
+      name = "jack";
+      home = "/Users/jack";
+      shell = pkgs.zsh;
     };
-    programs = {
-      zsh.enable = true;
-      direnv = {
-        enable = false;
-        enableZshIntegration = false;
-        nix-direnv.enable = false;
+  };
+
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    users.jack = { config, lib, pkgs, ... }: {
+      home = {
+        stateVersion = "25.11";
+        packages = with pkgs; [
+          coreutils
+          (lib.hiPrio pkgs.uutils-coreutils-noprefix) # `lib.hiPrio` is used to avoid potential conflict with `coreutils-full` (also see https://discourse.nixos.org/t/how-to-use-uutils-coreutils-instead-of-the-builtin-coreutils/8904/15?u=malix)
+          emacs
+          npins
+        ];
+        file = {
+          emacs = {
+            enable = true;
+            source = config.lib.file.mkOutOfStoreSymlink "${builtins.toString ./. + "/emacs/init.el"}";
+            target = ".emacs.d/init.el";
+          };
+        };
+      };
+      programs = {
+        git = {
+          enable = true;
+          userEmail = "randomdize@gmail.com";
+          userName = "Jack Shih";
+        };
+        zsh = {
+          enable = true;
+        };
+        direnv = {
+          enable = false;
+          enableZshIntegration = false;
+          nix-direnv.enable = false;
+        };
       };
     };
   };
