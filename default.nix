@@ -29,6 +29,7 @@ in
     darwinConfig = "${builtins.toString ./. + "/default.nix"}";
     shells = [
       pkgs.zsh
+      "/etc/profiles/per-user/jack/bin/zsh"
     ];
   };
 
@@ -112,11 +113,16 @@ in
     ];
   };
 
+  programs = {
+    zsh = {
+      enable = true;
+    };
+  };
+
   users = {
     users.jack = {
       name = "jack";
       home = "/Users/jack";
-      shell = pkgs.zsh;
     };
   };
 
@@ -133,7 +139,12 @@ in
           npins
         ];
         file = {
-          emacs = {
+          emacs-early-init = {
+            enable = true;
+            source = config.lib.file.mkOutOfStoreSymlink "${builtins.toString ./. + "/emacs/early-init.el"}";
+            target = ".emacs.d/early-init.el";
+          };
+          emacs-init = {
             enable = true;
             source = config.lib.file.mkOutOfStoreSymlink "${builtins.toString ./. + "/emacs/init.el"}";
             target = ".emacs.d/init.el";
@@ -148,6 +159,9 @@ in
         };
         zsh = {
           enable = true;
+          shellAliases = {
+            reset-launchpad = "rm $(getconf DARWIN_USER_DIR)com.apple.dock.launchpad/db/*;killall Dock";
+          };
         };
         direnv = {
           enable = false;
