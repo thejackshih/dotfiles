@@ -29,6 +29,8 @@ in
     darwinConfig = "${builtins.toString ./. + "/default.nix"}";
     shells = [
       pkgs.zsh
+      pkgs.bash
+      "/etc/profiles/per-user/jack/bin/bash"
       "/etc/profiles/per-user/jack/bin/zsh"
     ];
   };
@@ -47,7 +49,7 @@ in
         ApplePressAndHoldEnabled = false;
         InitialKeyRepeat = 15;
         KeyRepeat = 2;
-	      "com.apple.trackpad.scaling" = 1.5;
+        "com.apple.trackpad.scaling" = 1.5;
       };
       WindowManager = {
         EnableTiledWindowMargins = false;
@@ -62,24 +64,24 @@ in
         persistent-apps = [
           "/System/Applications/Launchpad.app"
         ];
-	      persistent-others = [];
+        persistent-others = [];
         tilesize = 32;
-	      show-recents = false;
-	      wvous-br-corner = 1;
+        show-recents = false;
+        wvous-br-corner = 1;
       };
       finder = {
         _FXSortFoldersFirst = true;
         AppleShowAllExtensions = true;
-	      AppleShowAllFiles = true;
-	      FXEnableExtensionChangeWarning = false;
-	      FXPreferredViewStyle = "clmv";
-	      ShowPathbar = true;
+        AppleShowAllFiles = true;
+        FXEnableExtensionChangeWarning = false;
+        FXPreferredViewStyle = "clmv";
+        ShowPathbar = true;
       };
       menuExtraClock = {
         Show24Hour = true;
         ShowAMPM = false;
-	      ShowDate = 2;
-	      ShowDayOfWeek = false;
+        ShowDate = 2;
+        ShowDayOfWeek = false;
       };
     };
     keyboard = {
@@ -104,6 +106,7 @@ in
       "calibre"
       "multiviewer-for-f1"
       "surfshark"
+      "firefox"
     ];
   };
 
@@ -114,6 +117,9 @@ in
   };
 
   programs = {
+    bash = {
+      enable = false;
+    };
     zsh = {
       enable = true;
     };
@@ -151,22 +157,50 @@ in
           };
         };
       };
+
+      services = {
+        emacs = {
+          enable = false;
+        };
+      };
+
       programs = {
         git = {
           enable = true;
           userEmail = "randomdize@gmail.com";
           userName = "Jack Shih";
         };
+        bash = {
+          enable = false;
+          bashrcExtra =
+            ''
+              export LC_ALL="en_US.UTF-8"
+            '';
+          shellAliases = lib.mkMerge [
+            {
+              reset-launchpad = "rm $(getconf DARWIN_USER_DIR)com.apple.dock.launchpad/db/*;killall Dock";
+            }
+            (lib.mkIf config.services.emacs.enable {
+              restart-emacs = "launchctl kickstart -k gui/$(id -u)/org.nix-community.home.emacs";
+            })
+          ];
+        };
         zsh = {
           enable = true;
-          shellAliases = {
-            reset-launchpad = "rm $(getconf DARWIN_USER_DIR)com.apple.dock.launchpad/db/*;killall Dock";
-          };
+          shellAliases = lib.mkMerge [
+            {
+              reset-launchpad = "rm $(getconf DARWIN_USER_DIR)com.apple.dock.launchpad/db/*;killall Dock";
+            }
+            (lib.mkIf config.services.emacs.enable {
+              restart-emacs = "launchctl kickstart -k gui/$(id -u)/org.nix-community.home.emacs";
+            })
+          ];
         };
         direnv = {
-          enable = false;
-          enableZshIntegration = false;
-          nix-direnv.enable = false;
+          enable = true;
+          enableBashIntegration = true;
+          enableZshIntegration = true;
+          nix-direnv.enable = true;
         };
       };
     };
