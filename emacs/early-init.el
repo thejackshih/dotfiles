@@ -5,3 +5,4 @@
 (setq gc-cons-threshold most-positive-fixnum
       gc-cons-percentage 0.6)
 (add-hook 'emacs-startup-hook #'restore-gc-cons-threshold 105)
+(setq package-enable-at-startup nil)

@@ -49,7 +49,7 @@ in
         ApplePressAndHoldEnabled = false;
         InitialKeyRepeat = 15;
         KeyRepeat = 2;
-        "com.apple.trackpad.scaling" = 1.5;
+        "com.apple.trackpad.scaling" = 2.0;
       };
       WindowManager = {
         EnableTiledWindowMargins = false;
@@ -107,18 +107,23 @@ in
       "multiviewer-for-f1"
       "surfshark"
       "firefox"
+      "obs"
     ];
   };
 
   fonts = {
     packages = with pkgs;[
       _0xproto
+      sarasa-gothic
+      mplus-outline-fonts.githubRelease
+      maple-mono.variable
+      maple-mono.CN
     ];
   };
 
   programs = {
     bash = {
-      enable = false;
+      enable = true;
     };
     zsh = {
       enable = true;
@@ -143,6 +148,8 @@ in
           (lib.hiPrio pkgs.uutils-coreutils-noprefix) # `lib.hiPrio` is used to avoid potential conflict with `coreutils-full` (also see https://discourse.nixos.org/t/how-to-use-uutils-coreutils-instead-of-the-builtin-coreutils/8904/15?u=malix)
           emacs
           npins
+          gemini-cli
+          nixd
         ];
         file = {
           emacs-early-init = {
@@ -171,7 +178,7 @@ in
           userName = "Jack Shih";
         };
         bash = {
-          enable = false;
+          enable = true;
           bashrcExtra =
             ''
               export LC_ALL="en_US.UTF-8"

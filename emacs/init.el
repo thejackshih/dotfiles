@@ -1,13 +1,21 @@
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
-			 ("elpa" . "https://elpa.gnu.org/packages/")
-			 ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
-(setq package-install-upgrade-built-in t)
-(package-initialize)
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name
+        "straight/repos/straight.el/bootstrap.el"
+        (or (bound-and-true-p straight-base-dir)
+            user-emacs-directory)))
+      (bootstrap-version 7))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-(unless package-archive-contents
-  (package-refresh-contents))
-
-(setq use-package-always-ensure t)
+(setq straight-use-package-by-default t)
+(straight-use-package 'use-package)
 
 (setq locale-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
@@ -19,17 +27,11 @@
 (setq initial-scratch-message "")
 (setq inhibit-startup-message t)
 (setq visible-bell t)
-(with-eval-after-load 'scroll-bar
-  (scroll-bar-mode -1))
-(with-eval-after-load 'tool-bar
-  (tool-bar-mode -1))
-(with-eval-after-load 'menu-bar
-  (if (daemonp)
-      (add-hook 'server-after-make-frame-hook
-                (lambda nil (menu-bar-mode -1)))
-    (menu-bar-mode -1)))
+
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
 (tooltip-mode -1)
-(set-fringe-mode 10)
 
 (setq native-comp-async-report-warnings-errors nil)
 
@@ -45,15 +47,14 @@
 (setq backup-directory-alist `((".*" . ,--backup-directory)))
 
 (set-face-attribute 'default nil
-		    :family "0xProto"
-		    :height 130
+		    :family "Sarasa Mono TC"
+		    :height 160
 		    :weight 'normal
 		    :width 'normal)
 
 (use-package exec-path-from-shell
-  :ensure t
   :config
-  (dolist (var '("LC_CTYPE" "NIX_PROFILES" "NIX_SSL_CERT_FILE"))
+  (dolist (var '("LC_CTYPE" "NIX_PROFILES" "NIX_SSL_CERT_FILE" "__NIX_DARWIN_SET_ENVIRONMENT_DONE"))
     (add-to-list 'exec-path-from-shell-variables var))
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize))
@@ -64,7 +65,7 @@
 (use-package ligature
   :config
   ;; Enable the "www" ligature in every possible major mode
-  (ligature-set-ligatures 't '("www"))
+  (ligature-set-ligatures 't'("www"))
   ;; Enable traditional ligature support in eww-mode, if the
   ;; `variable-pitch' face supports it
   (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
@@ -87,24 +88,20 @@
   (global-ligature-mode t))
 
 (use-package nix-mode
-  :ensure t
   :mode "\\.nix\\'")
 
 (use-package envrc
-  :ensure t
   :config
   (envrc-global-mode))
 
 (use-package magit
-  :ensure t
   :bind ("C-x g" . magit-status)
   :custom
   (magit-git-executable "/etc/profiles/per-user/jack/bin/git"))
 
-(assq-delete-all 'org package--builtins)
-(assq-delete-all 'org package--builtin-versions)
+;; (assq-delete-all 'org package--builtins)
+;; (assq-delete-all 'org package--builtin-versions)
 (use-package org
-  :ensure t
   :config
   (global-set-key (kbd "C-c l") #'org-store-link)
   (global-set-key (kbd "C-c a") #'org-agenda)
@@ -252,7 +249,7 @@
   ;; Optionally configure the register formatting. This improves the register
   ;; preview for `consult-register', `consult-register-load',
   ;; `consult-register-store' and the Emacs built-ins.
-  (setq register-preview-delay 0.5
+  (setq register-preview-delay 1
 	register-preview-function #'consult-register-format)
 
   ;; Optionally tweak the register preview window.
@@ -311,5 +308,98 @@
   (envrc-global-mode))
 
 (use-package ox-hugo
-  :ensure t   ;Auto-install the package from Melpa
   :after ox)
+
+(use-package eat
+  :straight (:type git
+                   :host codeberg
+                   :repo "akib/emacs-eat"
+                   :files ("*.el" ("term" "term/*.el") "*.texi"
+                           "*.ti" ("terminfo/e" "terminfo/e/*")
+                           ("terminfo/65" "dterminfo/65/*")
+                           ("integration" "integration/*")
+                           (:exclude ".dir-locals.el" "*-tests.el"))))
+
+(use-package nordic-night-theme
+  :straight (:type git :host codeberg :repo "ashton314/nordic-night" :branch "main"))
+
+(use-package autothemer
+  :straight (:type git :host github :repo "jasonm23/autothemer" :branch "main"))
+
+(use-package kanagawa-theme
+  :straight (:type git :host github :repo "konrad1977/kanagawa-emacs" :branch "main")
+  :init (add-to-list 'custom-theme-load-path (concat straight-base-dir "/straight/build/kanagawa-theme/")))
+
+(use-package cobrakai-theme
+  :straight (:type git :host github :repo "zikajk/emacs-cobrakai-theme" :branch "main")
+  :init (load-theme 'cobrakai t))
+
+(use-package gemini-cli
+  :straight (:type git :host github :repo "linchen2chris/gemini-cli.el" :branch "main"
+                   :files ("*.el" (:exclude "demo.gif")))
+  :bind-keymap
+  ("C-c c" . gemini-cli-command-map)
+  :config
+  (setq gemini-cli-terminal-backend 'eat)
+  (gemini-cli-mode))
+
+(use-package ai-code-interface
+  :straight (:host github :repo "tninja/ai-code-interface.el" :branch "main")
+  :after (magit gemini-cli)
+  :config
+  ;; Enable global keybinding for the main menu
+  (global-set-key (kbd "C-c a") #'ai-code-menu)
+  
+  ;; Optional: Set up Magit integration for AI commands in Magit popups
+  (with-eval-after-load 'magit
+    (ai-code-magit-setup-transients))
+
+  (with-eval-after-load 'ai-code-interface
+    (require 'gemini-cli)
+    (defalias 'ai-code-cli-start #'gemini-cli-mode)
+    (defalias 'ai-code-cli-switch-to-buffer #'gemini-cli-switch-to-buffer)
+    (defalias 'ai-code-cli-send-command #'gemini-cli-send-command)
+    (setq ai-code-cli "gemini")))
+
+;; (setq treesit-language-source-alist
+;;       '((go "https://github.com/tree-sitter/tree-sitter-go")
+;;         (gomod "https://github.com/camdencheek/tree-sitter-go-mod")))
+
+
+(use-package lsp-mode
+  :custom
+  (lsp-completion-provider :none)
+  :init
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+  (setq lsp-keymap-prefix "C-c l")
+  (defun my/lsp-mode-setup-completion ()
+    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+          '(orderless))) ;; Configure orderless
+  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+         ;; (python-ts-mode . lsp)
+	 ;; (go-ts-mode . lsp)
+	 ;; (nix-mode . lsp)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration)
+	 (lsp-completion-mode . my/lsp-mode-setup-completion))
+  :commands lsp)
+
+(with-eval-after-load 'lsp-mode
+  (lsp-register-client
+    (make-lsp-client :new-connection (lsp-stdio-connection "nixd")
+                     :major-modes '(nix-mode)
+                     :priority 0
+                     :server-id 'nixd)))
+
+;; optionally
+(use-package lsp-ui :commands lsp-ui-mode)
+(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+
+;; optionally if you want to use debugger
+(use-package dap-mode)
+;; (use-package dap-LANGUAGE) to load the dap adapter for your language
+
+;; optional if you want which-key integration
+(use-package which-key
+    :config
+    (which-key-mode))
