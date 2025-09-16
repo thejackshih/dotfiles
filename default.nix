@@ -62,7 +62,8 @@ in
         mru-spaces = false;
         orientation = "bottom";
         persistent-apps = [
-          "/System/Applications/Launchpad.app"
+          "/System/Applications/Apps.app"
+          "/Users/jack/Applications/Home Manager Apps/Emacs.app"
         ];
         persistent-others = [];
         tilesize = 32;
@@ -108,6 +109,7 @@ in
       "surfshark"
       "firefox"
       "obs"
+      "betterdisplay"
     ];
   };
 
@@ -115,9 +117,9 @@ in
     packages = with pkgs;[
       _0xproto
       sarasa-gothic
-      mplus-outline-fonts.githubRelease
-      maple-mono.variable
-      maple-mono.CN
+      # mplus-outline-fonts.githubRelease
+      # maple-mono.variable
+      # maple-mono.CN
     ];
   };
 
@@ -150,6 +152,7 @@ in
           npins
           gemini-cli
           nixd
+          nix-search-cli
         ];
         file = {
           emacs-early-init = {
