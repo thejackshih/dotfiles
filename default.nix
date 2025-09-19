@@ -61,10 +61,7 @@ in
         launchanim = true;
         mru-spaces = false;
         orientation = "bottom";
-        persistent-apps = [
-          "/System/Applications/Apps.app"
-          "/Users/jack/Applications/Home Manager Apps/Emacs.app"
-        ];
+        persistent-apps = [];
         persistent-others = [];
         tilesize = 32;
         show-recents = false;
@@ -110,6 +107,8 @@ in
       "firefox"
       "obs"
       "betterdisplay"
+      "ghostty"
+      "raycast"
     ];
   };
 
@@ -153,6 +152,7 @@ in
           gemini-cli
           nixd
           nix-search-cli
+          neovim
         ];
         file = {
           emacs-early-init = {
