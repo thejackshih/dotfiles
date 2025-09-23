@@ -35,10 +35,6 @@ in
     ];
   };
 
-  networking = {
-    hostName = "Jacks-MacBook-Pro";
-  };
-
   system = {
     stateVersion = 6;
     primaryUser = "jack";
@@ -114,11 +110,7 @@ in
 
   fonts = {
     packages = with pkgs;[
-      _0xproto
       sarasa-gothic
-      # mplus-outline-fonts.githubRelease
-      # maple-mono.variable
-      # maple-mono.CN
     ];
   };
 
