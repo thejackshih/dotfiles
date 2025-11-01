@@ -179,8 +179,6 @@ in
               name = "Jack Shih";
             };
           };
-          userEmail = "randomdize@gmail.com";
-          userName = "Jack Shih";
         };
         bash = {
           enable = true;
