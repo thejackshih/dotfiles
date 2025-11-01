@@ -145,6 +145,10 @@ in
           nixd
           nix-search-cli
           neovim
+          clisp
+          graphviz
+          clojure
+          leiningen
         ];
         file = {
           emacs-early-init = {
@@ -169,6 +173,12 @@ in
       programs = {
         git = {
           enable = true;
+          settings = {
+            user = {
+              email = "randomdize@gmail.com";
+              name = "Jack Shih";
+            };
+          };
           userEmail = "randomdize@gmail.com";
           userName = "Jack Shih";
         };

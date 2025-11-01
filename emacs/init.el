@@ -156,7 +156,7 @@
   ;; Optional customizations
   :custom
   (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-  (corfu-auto t)                 ;; Enable auto completion
+  ;; (corfu-auto t)                 ;; Enable auto completion
   (corfu-separator ?\s)          ;; Orderless field separator
   ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
   ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
@@ -403,3 +403,20 @@
 (use-package which-key
     :config
     (which-key-mode))
+
+(defun me/rebuild-darwin ()
+  "Async Call darwin rebuild"
+  (interactive)
+  (async-shell-command "sudo darwin-rebuild switch"))
+
+(use-package slime
+  :config
+  (setq inferior-lisp-program "/etc/profiles/per-user/jack/bin/clisp")
+  (slime-setup '(slime-fancy slime-quicklisp slime-asdf slime-mrepl))
+  )
+
+(use-package rainbow-delimiters)
+
+(use-package cider)
+
+(use-package paredit)
