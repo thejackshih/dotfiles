@@ -57,7 +57,9 @@ in
         launchanim = true;
         mru-spaces = false;
         orientation = "bottom";
-        persistent-apps = [];
+        persistent-apps = [
+          "/Users/jack/Applications/Home Manager Apps/Emacs.app"
+        ];
         persistent-others = [];
         tilesize = 32;
         show-recents = false;
@@ -77,12 +79,22 @@ in
         ShowDate = 2;
         ShowDayOfWeek = false;
       };
+      # CustomUserPreferences = {
+      #   "com.apple.symbolichotkeys" = {
+      #     AppleSymbolicHotKeys = {
+      #       "52".enabled = true;
+      #     };
+      #   };
+      # };
     };
     keyboard = {
       enableKeyMapping = true;
       remapCapsLockToControl = true;
     };
   };
+#   system.activationScripts.postActivation.text = ''
+# /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+# '';
 
   homebrew = {
     enable = true;
@@ -98,19 +110,19 @@ in
       "1password"
       "adobe-digital-editions"
       "calibre"
-      "multiviewer-for-f1"
+      "multiviewer"
       "surfshark"
       "firefox"
       "obs"
       "betterdisplay"
-      "ghostty"
-      "raycast"
     ];
   };
 
   fonts = {
     packages = with pkgs;[
       sarasa-gothic
+      iosevka
+      mplus-outline-fonts.githubRelease
     ];
   };
 

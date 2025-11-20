@@ -133,7 +133,7 @@
   ;; (setq vertico-scroll-margin 0)
 
   ;; Show more candidates
-  ;; (setq vertico-count 20)
+  ;; (setq vertico-count 10)
 
   ;; Grow and shrink the Vertico minibuffer
   ;; (setq vertico-resize t)
@@ -404,10 +404,36 @@
     :config
     (which-key-mode))
 
-(defun me/rebuild-darwin ()
+(defun my-darwin-rebuild ()
   "Async Call darwin rebuild"
   (interactive)
   (async-shell-command "sudo darwin-rebuild switch"))
+
+
+(defun my-launch-app ()
+  "start application"
+  (interactive)
+  (progn
+    (make-frame `((parent-frame . ,(selected-frame))
+		  (undecorated . t)
+		  (minibuffer . only)
+		  (left . ,(/ (- (frame-pixel-width (selected-frame)) (* 40 (frame-char-width))) 2))
+		  (top . 0)))
+    (unwind-protect
+	(let* ((apps (append
+		      (directory-files "/Applications" nil ".app")
+		      (directory-files "~/Applications" nil ".app")
+		      (directory-files "/system/Applications" nil ".app")
+		      (directory-files "/system/Applications/Utilities" nil ".app")))
+	       (apps-no-dot (mapcar (lambda (x) (string-replace ".app" "" x)) apps))
+	       (vertico-count 30)
+	       (resize-mini-frames t)
+	       (max-mini-windows-height 0.8)
+	       (window-min-width 40)
+	       (user-choice (completing-read "Select a app:" apps-no-dot nil t)))
+	    (start-process "launcher" nil "open" "-a" user-choice))
+	    (delete-frame)
+	    )))
 
 (use-package slime
   :config
@@ -420,3 +446,6 @@
 (use-package cider)
 
 (use-package paredit)
+
+(global-set-key (kbd "M-s-<SPC>") 'my-launch-app)
+
