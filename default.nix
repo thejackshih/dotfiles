@@ -115,6 +115,7 @@ in
       "firefox"
       "obs"
       "betterdisplay"
+      "virtual-desktop-streamer"
     ];
   };
 
