@@ -2,12 +2,14 @@
 let
   sources = import ./npins;
   home-manager-nix-darwin-module = (import sources.home-manager {}).path + "/nix-darwin";
+  emacs-overlay = (import sources.emacs-overlay);
 in
 {
   imports = [home-manager-nix-darwin-module];
 
   nixpkgs = {
     source = sources.nixpkgs;
+    overlays = [emacs-overlay];
   };
 
   nix = {
@@ -115,7 +117,6 @@ in
       "firefox"
       "obs"
       "betterdisplay"
-      "virtual-desktop-streamer"
     ];
   };
 
@@ -124,6 +125,17 @@ in
       sarasa-gothic
       iosevka
       mplus-outline-fonts.githubRelease
+      fira
+      fira-code
+      monocraft
+      jetbrains-mono
+      geist-font
+      aporetic
+      hack-font
+      cascadia-code
+      liberation_ttf
+      roboto
+      roboto-mono
     ];
   };
 
@@ -148,11 +160,11 @@ in
     useUserPackages = true;
     users.jack = { config, lib, pkgs, ... }: {
       home = {
-        stateVersion = "25.11";
+        stateVersion = "26.05";
         packages = with pkgs; [
           coreutils
-          (lib.hiPrio pkgs.uutils-coreutils-noprefix) # `lib.hiPrio` is used to avoid potential conflict with `coreutils-full` (also see https://discourse.nixos.org/t/how-to-use-uutils-coreutils-instead-of-the-builtin-coreutils/8904/15?u=malix)
-          emacs
+          # (lib.hiPrio pkgs.uutils-coreutils-noprefix) # `lib.hiPrio` is used to avoid potential conflict with `coreutils-full` (also see https://discourse.nixos.org/t/how-to-use-uutils-coreutils-instead-of-the-builtin-coreutils/8904/15?u=malix)
+          emacs-git-pgtk
           npins
           gemini-cli
           nixd
@@ -210,6 +222,11 @@ in
         };
         zsh = {
           enable = true;
+          envExtra =
+            ''
+              export LANG="en_US.UTF-8"
+              export LC_CTYPE="en_US.UTF-8"
+            '';
           shellAliases = lib.mkMerge [
             {
               reset-launchpad = "rm $(getconf DARWIN_USER_DIR)com.apple.dock.launchpad/db/*;killall Dock";

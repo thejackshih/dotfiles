@@ -33,7 +33,10 @@
 (menu-bar-mode -1)
 (tooltip-mode -1)
 
+(setopt use-short-answer t)
+
 (setq native-comp-async-report-warnings-errors nil)
+(setq warning-suppress-log-types '((files missing-lexbind-cookie)))
 
 (defvar --custom-el (concat user-emacs-directory "custom.el"))
 (if (not (file-exists-p --custom-el))
@@ -48,7 +51,17 @@
 
 (set-face-attribute 'default nil
 		    :family "Sarasa Mono TC"
-		    :height 160
+		    ;; :family "Geist Mono"
+		    ;; :family "JetBrains Mono"
+		    ;; :family "MPlus Code 50"
+		    ;; :family "Iosevka"
+		    ;; :family "Aporetic Sans Mono"
+		    ;; :family "Fira Code"
+		    ;; :family "Cascadia Code"
+		    ;; :family "Hack"
+		    ;; :family "Liberation Mono"
+		    ;; :family "Roboto Mono"
+		    :height 130
 		    :weight 'normal
 		    :width 'normal)
 
@@ -318,13 +331,14 @@
                            "*.ti" ("terminfo/e" "terminfo/e/*")
                            ("terminfo/65" "dterminfo/65/*")
                            ("integration" "integration/*")
-                           (:exclude ".dir-locals.el" "*-tests.el"))))
+                           (:exclude ".dir-locals.el" "*-tests.el")))
+  :config (eat-compile-terminfo))
 
 (use-package nordic-night-theme
   :straight (:type git :host codeberg :repo "ashton314/nordic-night" :branch "main"))
 
 (use-package autothemer
-  :straight (:type git :host github :repo "jasonm23/autothemer" :branch "main"))
+  :straight (:type git :host github :repo "jasonm23/autothemer" :branch "master"))
 
 (use-package kanagawa-theme
   :straight (:type git :host github :repo "konrad1977/kanagawa-emacs" :branch "main")
@@ -334,37 +348,19 @@
   :straight (:type git :host github :repo "zikajk/emacs-cobrakai-theme" :branch "main")
   :init (load-theme 'cobrakai t))
 
+(use-package popup :ensure t)
+
+(use-package projectile)
+
 (use-package gemini-cli
   :straight (:type git :host github :repo "linchen2chris/gemini-cli.el" :branch "main"
                    :files ("*.el" (:exclude "demo.gif")))
+  :after (projectile eat)
   :bind-keymap
   ("C-c c" . gemini-cli-command-map)
   :config
   (setq gemini-cli-terminal-backend 'eat)
   (gemini-cli-mode))
-
-(use-package ai-code-interface
-  :straight (:host github :repo "tninja/ai-code-interface.el" :branch "main")
-  :after (magit gemini-cli)
-  :config
-  ;; Enable global keybinding for the main menu
-  (global-set-key (kbd "C-c a") #'ai-code-menu)
-  
-  ;; Optional: Set up Magit integration for AI commands in Magit popups
-  (with-eval-after-load 'magit
-    (ai-code-magit-setup-transients))
-
-  (with-eval-after-load 'ai-code-interface
-    (require 'gemini-cli)
-    (defalias 'ai-code-cli-start #'gemini-cli-mode)
-    (defalias 'ai-code-cli-switch-to-buffer #'gemini-cli-switch-to-buffer)
-    (defalias 'ai-code-cli-send-command #'gemini-cli-send-command)
-    (setq ai-code-cli "gemini")))
-
-;; (setq treesit-language-source-alist
-;;       '((go "https://github.com/tree-sitter/tree-sitter-go")
-;;         (gomod "https://github.com/camdencheek/tree-sitter-go-mod")))
-
 
 (use-package lsp-mode
   :custom
@@ -397,18 +393,32 @@
 
 ;; optionally if you want to use debugger
 (use-package dap-mode)
-;; (use-package dap-LANGUAGE) to load the dap adapter for your language
+;; (use-package dap-LANGUAGE) to load the adapter dap for your language
 
 ;; optional if you want which-key integration
 (use-package which-key
     :config
     (which-key-mode))
 
+
+(use-package slime
+  :config
+  (setq inferior-lisp-program "/etc/profiles/per-user/jack/bin/clisp")
+  (slime-setup '(slime-fancy slime-quicklisp slime-asdf slime-mrepl))
+  )
+
+(use-package rainbow-delimiters)
+
+(use-package cider)
+
+(use-package paredit)
+
+(use-package nord-theme)
+
 (defun my-darwin-rebuild ()
   "Async Call darwin rebuild"
   (interactive)
   (async-shell-command "sudo darwin-rebuild switch"))
-
 
 (defun my-launch-app ()
   "start application"
@@ -431,21 +441,20 @@
 	       (max-mini-windows-height 0.8)
 	       (window-min-width 40)
 	       (user-choice (completing-read "Select a app:" apps-no-dot nil t)))
-	    (start-process "launcher" nil "open" "-a" user-choice))
-	    (delete-frame)
-	    )))
-
-(use-package slime
-  :config
-  (setq inferior-lisp-program "/etc/profiles/per-user/jack/bin/clisp")
-  (slime-setup '(slime-fancy slime-quicklisp slime-asdf slime-mrepl))
-  )
-
-(use-package rainbow-delimiters)
-
-(use-package cider)
-
-(use-package paredit)
+	  (with-environment-variables (("__NIX_DARWIN_SET_ENVIRONMENT_DONE" ""))
+	    (start-process "launcher" nil "open" "-a" user-choice)))
+      (delete-frame)
+      )))
 
 (global-set-key (kbd "M-s-<SPC>") 'my-launch-app)
 
+(use-package lambda-themes
+  :straight (:type git :host github :repo "lambda-emacs/lambda-themes") 
+  :custom
+  (lambda-themes-set-italic-comments t)
+  (lambda-themes-set-italic-keywords t)
+  (lambda-themes-set-variable-pitch t) 
+  :config
+  ;; load preferred theme 
+  ;;(load-theme 'lambda-light)
+  )
