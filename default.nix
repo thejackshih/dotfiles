@@ -117,6 +117,8 @@ in
       "firefox"
       "obs"
       "betterdisplay"
+      "nvidia-geforce-now"
+      "microsoft-edge"
     ];
   };
 
