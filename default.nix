@@ -21,7 +21,7 @@ in
     nixPath = [
       {
         nixpkgs = "${sources.nixpkgs.url}";
-        darwin = "${sources.nix-darwin.outPath.outPath}";
+        darwin = "${sources.nix-darwin.outPath}";
         darwin-config = "${config.environment.darwinConfig}";
       }
     ];

@@ -50,8 +50,8 @@
 (setq backup-directory-alist `((".*" . ,--backup-directory)))
 
 (set-face-attribute 'default nil
-		    :family "Sarasa Mono TC"
-		    ;; :family "Geist Mono"
+		    ;; :family "Sarasa Mono TC"
+		    :family "Geist Mono"
 		    ;; :family "JetBrains Mono"
 		    ;; :family "MPlus Code 50"
 		    ;; :family "Iosevka"
@@ -74,15 +74,8 @@
   (when (daemonp)
     (exec-path-from-shell-initialize)))
 
-;; This assumes you've installed the package via MELPA.
 (use-package ligature
   :config
-  ;; Enable the "www" ligature in every possible major mode
-  (ligature-set-ligatures 't'("www"))
-  ;; Enable traditional ligature support in eww-mode, if the
-  ;; `variable-pitch' face supports it
-  (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
-  ;; Enable all Cascadia Code ligatures in programming modes
   (ligature-set-ligatures 'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
 				       ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
 				       "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
@@ -96,8 +89,6 @@
 				       "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
 				       "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
 				       "\\\\" "://"))
-  ;; Enables ligature checks globally in all buffers. You can also do it
-  ;; per mode with `ligature-mode'.
   (global-ligature-mode t))
 
 (use-package nix-mode
@@ -112,15 +103,12 @@
   :custom
   (magit-git-executable "/etc/profiles/per-user/jack/bin/git"))
 
-;; (assq-delete-all 'org package--builtins)
-;; (assq-delete-all 'org package--builtin-versions)
 (use-package org
   :config
   (global-set-key (kbd "C-c l") #'org-store-link)
   (global-set-key (kbd "C-c a") #'org-agenda)
   (global-set-key (kbd "C-c c") #'org-capture)
-  (setq org-log-done 'time)
-  )
+  (setq org-log-done 'time))
 
 ;; Enable rich annotations using the Marginalia package
 (use-package marginalia
