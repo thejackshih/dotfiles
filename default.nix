@@ -81,13 +81,18 @@ in
         ShowDate = 2;
         ShowDayOfWeek = false;
       };
-      # CustomUserPreferences = {
-      #   "com.apple.symbolichotkeys" = {
-      #     AppleSymbolicHotKeys = {
-      #       "52".enabled = true;
-      #     };
-      #   };
-      # };
+      CustomUserPreferences = {
+        NSGlobalDomain = {
+          # Hide macOS Tahoe's menu icons
+          # ref: https://512pixels.net/2026/03/hide-macos-tahoes-menu-icons-with-this-one-simple-trick/
+          NSMenuEnableActionImages = false;
+        };
+        # "com.apple.symbolichotkeys" = {
+          # AppleSymbolicHotKeys = {
+            # "52".enabled = true;
+          # };
+        # };
+      };
     };
     keyboard = {
       enableKeyMapping = true;
