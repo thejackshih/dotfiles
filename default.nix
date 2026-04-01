@@ -130,19 +130,6 @@ in
   fonts = {
     packages = with pkgs;[
       sarasa-gothic
-      iosevka
-      mplus-outline-fonts.githubRelease
-      fira
-      fira-code
-      monocraft
-      jetbrains-mono
-      geist-font
-      aporetic
-      hack-font
-      cascadia-code
-      liberation_ttf
-      roboto
-      roboto-mono
     ];
   };
 
@@ -171,16 +158,11 @@ in
         packages = with pkgs; [
           coreutils
           # (lib.hiPrio pkgs.uutils-coreutils-noprefix) # `lib.hiPrio` is used to avoid potential conflict with `coreutils-full` (also see https://discourse.nixos.org/t/how-to-use-uutils-coreutils-instead-of-the-builtin-coreutils/8904/15?u=malix)
-          emacs-git-pgtk
+          emacs
           npins
           gemini-cli
           nixd
           nix-search-cli
-          neovim
-          clisp
-          graphviz
-          clojure
-          leiningen
         ];
         file = {
           emacs-early-init = {
@@ -217,6 +199,8 @@ in
           bashrcExtra =
             ''
               export LC_ALL="en_US.UTF-8"
+              export LC_CTYPE="en_US.UTF-8"
+              export LANG="en_US.UTF-8"
             '';
           shellAliases = lib.mkMerge [
             {

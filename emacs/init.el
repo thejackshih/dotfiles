@@ -33,7 +33,7 @@
 (menu-bar-mode -1)
 (tooltip-mode -1)
 
-(setopt use-short-answer t)
+(setopt use-short-answers t)
 
 (setq native-comp-async-report-warnings-errors nil)
 (setq warning-suppress-log-types '((files missing-lexbind-cookie)))
@@ -50,18 +50,7 @@
 (setq backup-directory-alist `((".*" . ,--backup-directory)))
 
 (set-face-attribute 'default nil
-		    ;; :family "Sarasa Mono TC"
-		    :family "Geist Mono"
-		    ;; :family "JetBrains Mono"
-		    ;; :family "MPlus Code 50"
-		    ;; :family "Iosevka"
-		    ;; :family "Aporetic Sans Mono"
-		    ;; :family "Fira Code"
-		    ;; :family "Cascadia Code"
-		    ;; :family "Hack"
-		    ;; :family "Liberation Mono"
-		    ;; :family "Roboto Mono"
-		    :height 130
+		    :height 120
 		    :weight 'normal
 		    :width 'normal)
 
@@ -311,45 +300,6 @@
 (use-package ox-hugo
   :after ox)
 
-(use-package eat
-  :straight (:type git
-                   :host codeberg
-                   :repo "akib/emacs-eat"
-                   :files ("*.el" ("term" "term/*.el") "*.texi"
-                           "*.ti" ("terminfo/e" "terminfo/e/*")
-                           ("terminfo/65" "dterminfo/65/*")
-                           ("integration" "integration/*")
-                           (:exclude ".dir-locals.el" "*-tests.el")))
-  :config (eat-compile-terminfo))
-
-(use-package nordic-night-theme
-  :straight (:type git :host codeberg :repo "ashton314/nordic-night" :branch "main"))
-
-(use-package autothemer
-  :straight (:type git :host github :repo "jasonm23/autothemer" :branch "master"))
-
-(use-package kanagawa-theme
-  :straight (:type git :host github :repo "konrad1977/kanagawa-emacs" :branch "main")
-  :init (add-to-list 'custom-theme-load-path (concat straight-base-dir "/straight/build/kanagawa-theme/")))
-
-(use-package cobrakai-theme
-  :straight (:type git :host github :repo "zikajk/emacs-cobrakai-theme" :branch "main")
-  :init (load-theme 'cobrakai t))
-
-(use-package popup :ensure t)
-
-(use-package projectile)
-
-(use-package gemini-cli
-  :straight (:type git :host github :repo "linchen2chris/gemini-cli.el" :branch "main"
-                   :files ("*.el" (:exclude "demo.gif")))
-  :after (projectile eat)
-  :bind-keymap
-  ("C-c c" . gemini-cli-command-map)
-  :config
-  (setq gemini-cli-terminal-backend 'eat)
-  (gemini-cli-mode))
-
 (use-package lsp-mode
   :custom
   (lsp-completion-provider :none)
@@ -388,7 +338,6 @@
     :config
     (which-key-mode))
 
-
 (use-package slime
   :config
   (setq inferior-lisp-program "/etc/profiles/per-user/jack/bin/clisp")
@@ -400,8 +349,6 @@
 (use-package cider)
 
 (use-package paredit)
-
-(use-package nord-theme)
 
 (defun my-darwin-rebuild ()
   "Async Call darwin rebuild"
@@ -436,13 +383,4 @@
 
 (global-set-key (kbd "M-s-<SPC>") 'my-launch-app)
 
-(use-package lambda-themes
-  :straight (:type git :host github :repo "lambda-emacs/lambda-themes") 
-  :custom
-  (lambda-themes-set-italic-comments t)
-  (lambda-themes-set-italic-keywords t)
-  (lambda-themes-set-variable-pitch t) 
-  :config
-  ;; load preferred theme 
-  ;;(load-theme 'lambda-light)
-  )
+(use-package vue-mode)
