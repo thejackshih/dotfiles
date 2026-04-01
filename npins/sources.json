@@ -20,9 +20,9 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "26dfad95d92c50a56ce708f4256bf720bb30a630",
+      "revision": "1ce9e62690dfdd7e76bd266ccb9a887778410eb2",
       "url": null,
-      "hash": "sha256-STUF5x1eQNKrhGn53WH1GpzBCsG719yl5rYnm7+1c4I="
+      "hash": "sha256-UWM4VZvfKaPwA9FMu7iZha5YAE8vsEtUazk+rFxmbTY="
     },
     "nix-darwin": {
       "type": "Git",
@@ -32,9 +32,9 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "6c5a56295d2a24e43bcd8af838def1b9a95746b2",
+      "revision": "06648f4902343228ce2de79f291dd5a58ee12146",
       "url": null,
-      "hash": "sha256-6J/JoK9iL7sHvKJcGW2KId2agaKv1OGypsa7kN+ZBD4="
+      "hash": "sha256-KM2WYj6EA7M/FVZVCl3rqWY+TFV5QzSyyGE2gQxeODU="
     },
     "nixpkgs": {
       "type": "Channel",
