@@ -34,9 +34,10 @@
 (tooltip-mode -1)
 
 (setopt use-short-answers t)
-
 (setq native-comp-async-report-warnings-errors nil)
 (setq warning-suppress-log-types '((files missing-lexbind-cookie)))
+
+(setq read-process-output-max (* 1024 1024))
 
 (defvar --custom-el (concat user-emacs-directory "custom.el"))
 (if (not (file-exists-p --custom-el))
@@ -49,14 +50,20 @@
     (make-directory --backup-directory t))
 (setq backup-directory-alist `((".*" . ,--backup-directory)))
 
+(defvar --autosave-directory (concat user-emacs-directory "autosaves"))
+(if (not (file-exists-p --autosave-directory))
+    (make-directory --autosave-directory t))
+(setq auto-save-file-name-transforms `((".*" ,--autosave-directory t)))
+
 (set-face-attribute 'default nil
-		    :height 120
+		    :family "Sarasa Mono TC"
+		    :height 130
 		    :weight 'normal
 		    :width 'normal)
 
 (use-package exec-path-from-shell
   :config
-  (dolist (var '("LC_CTYPE" "NIX_PROFILES" "NIX_SSL_CERT_FILE" "__NIX_DARWIN_SET_ENVIRONMENT_DONE"))
+  (dolist (var '("LC_CTYPE" "NIX_PROFILES" "NIX_SSL_CERT_FILE" "__NIX_DARWIN_SET_ENVIRONMENT_DONE" "LSP_USE_PLISTS"))
     (add-to-list 'exec-path-from-shell-variables var))
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize))
@@ -325,12 +332,25 @@
   )
 
 (use-package rainbow-delimiters)
-
 (use-package cider)
-
 (use-package paredit)
-
 (use-package vue-mode)
+(use-package autothemer)
+(use-package rose-pine-theme
+  :straight (rose-pine-theme
+             :type git
+             :host github
+             :repo "konrad1977/pinerose-emacs")
+  :after autothemer
+  :config
+  (load-theme 'rose-pine t))
+
+(use-package agent-shell
+  :ensure t
+  :config
+  (setq agent-shell-google-authentication
+      (agent-shell-google-make-authentication :login t)))
+
 
 (defun my-darwin-rebuild ()
   "Async Call darwin rebuild"
