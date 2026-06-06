@@ -13,7 +13,7 @@ in
   };
 
   nix = {
-    package = pkgs.nixVersions.latest;
+    package = pkgs.lixPackageSets.stable.lix;
     channel.enable = false;
     extraOptions = ''
       experimental-features = nix-command flakes
@@ -47,7 +47,10 @@ in
         ApplePressAndHoldEnabled = false;
         InitialKeyRepeat = 15;
         KeyRepeat = 2;
-        "com.apple.trackpad.scaling" = 2.0;
+        "com.apple.trackpad.scaling" = 3.0;
+      };
+      ".GlobalPreferences" = {
+        "com.apple.mouse.scaling" = 3.0;
       };
       WindowManager = {
         EnableTiledWindowMargins = false;
@@ -107,7 +110,7 @@ in
     enable = true;
     onActivation = {
       autoUpdate = true;
-      cleanup = "uninstall";
+      cleanup = "none";
     };
     taps = [
       "d12frosted/emacs-plus"
@@ -115,7 +118,7 @@ in
     brews = [];
     casks = [
       "1password"
-      "adobe-digital-editions"
+      # "adobe-digital-editions"
       "calibre"
       "multiviewer"
       "surfshark"
@@ -154,7 +157,7 @@ in
     useUserPackages = true;
     users.jack = { config, lib, pkgs, ... }: {
       home = {
-        stateVersion = "26.05";
+        stateVersion = "26.11";
         packages = with pkgs; [
           coreutils
           # (lib.hiPrio pkgs.uutils-coreutils-noprefix) # `lib.hiPrio` is used to avoid potential conflict with `coreutils-full` (also see https://discourse.nixos.org/t/how-to-use-uutils-coreutils-instead-of-the-builtin-coreutils/8904/15?u=malix)
@@ -163,6 +166,7 @@ in
           gemini-cli
           nixd
           nix-search-cli
+          gcc
         ];
         file = {
           emacs-early-init = {
