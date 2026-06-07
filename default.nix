@@ -3,6 +3,7 @@ let
   sources = import ./npins;
   home-manager-nix-darwin-module = (import sources.home-manager {}).path + "/nix-darwin";
   emacs-overlay = (import sources.emacs-overlay);
+  my-username = "jack";
 in
 {
   imports = [home-manager-nix-darwin-module];
@@ -32,14 +33,14 @@ in
     shells = [
       pkgs.zsh
       pkgs.bash
-      "/etc/profiles/per-user/jack/bin/bash"
-      "/etc/profiles/per-user/jack/bin/zsh"
+      "/etc/profiles/per-user/${my-username}/bin/bash"
+      "/etc/profiles/per-user/${my-username}/bin/zsh"
     ];
   };
 
   system = {
     stateVersion = 6;
-    primaryUser = "jack";
+    primaryUser = my-username;
     defaults = {
       NSGlobalDomain = {
         _HIHideMenuBar = false;
@@ -90,11 +91,36 @@ in
           # ref: https://512pixels.net/2026/03/hide-macos-tahoes-menu-icons-with-this-one-simple-trick/
           NSMenuEnableActionImages = false;
         };
-        # "com.apple.symbolichotkeys" = {
-          # AppleSymbolicHotKeys = {
-            # "52".enabled = true;
-          # };
-        # };
+        "com.apple.symbolichotkeys" = {
+          AppleSymbolicHotKeys = {
+            # Select Previous Input Source
+            "60" = {
+              enabled = true;
+              value = {
+                # cmd + space
+                parameters = [32 49 1048576];
+                type = "standard";
+              };
+            };
+            # Select next source in input menu
+            "61" = {
+              enabled = false;
+            };
+            # Show Spotlight Search
+            "64" = {
+              enabled = true;
+              value = {
+                # option + cmd + space
+                parameters = [32 49 1572864];
+                type = "standard";
+              };
+            };
+            # Show Finder search window
+            "65" = {
+              enabled = false;
+            };
+          };
+        };
       };
     };
     keyboard = {
@@ -102,9 +128,11 @@ in
       remapCapsLockToControl = true;
     };
   };
-#   system.activationScripts.postActivation.text = ''
-# /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
-# '';
+  # run activateSettings -u as user to apply keyboard shortcut change without logout
+  # ref: https://zameermanji.com/blog/2021/6/8/applying-com-apple-symbolichotkeys-changes-instantaneously/
+  system.activationScripts.postActivation.text = ''
+sudo -u ${my-username} /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+'';
 
   homebrew = {
     enable = true;
@@ -146,9 +174,9 @@ in
   };
 
   users = {
-    users.jack = {
-      name = "jack";
-      home = "/Users/jack";
+    users.${my-username} = {
+      name = my-username;
+      home = "/Users/${my-username}";
     };
   };
 

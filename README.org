@@ -4,6 +4,9 @@
 This is my config
 
 ** How to install
+*** Setup
+1. change =my-username= to your username in =default.nix=
+
 *** With Nix
 1. use nix-shell to install nix-darwin.
 2. use shell alias install to apply config.
