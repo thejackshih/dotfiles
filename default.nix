@@ -14,7 +14,7 @@ in
   };
 
   nix = {
-    package = pkgs.lixPackageSets.stable.lix;
+    package = pkgs.lixPackageSets.latest.lix;
     channel.enable = false;
     extraOptions = ''
       experimental-features = nix-command flakes
