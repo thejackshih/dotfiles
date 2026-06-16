@@ -63,7 +63,7 @@
 
 (use-package exec-path-from-shell
   :config
-  (dolist (var '("LC_CTYPE" "NIX_PROFILES" "NIX_SSL_CERT_FILE" "__NIX_DARWIN_SET_ENVIRONMENT_DONE" "LSP_USE_PLISTS"))
+  (dolist (var '("LC_CTYPE" "NIX_PROFILES" "NIX_SSL_CERT_FILE" "__NIX_DARWIN_SET_ENVIRONMENT_DONE" "LSP_USE_PLISTS" "NIX_PATH"))
     (add-to-list 'exec-path-from-shell-variables var))
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize))
