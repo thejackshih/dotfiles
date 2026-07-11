@@ -32,6 +32,7 @@
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (tooltip-mode -1)
+(toggle-frame-fullscreen)
 
 (setopt use-short-answers t)
 (setq native-comp-async-report-warnings-errors nil)
@@ -104,7 +105,12 @@
   (global-set-key (kbd "C-c l") #'org-store-link)
   (global-set-key (kbd "C-c a") #'org-agenda)
   (global-set-key (kbd "C-c c") #'org-capture)
-  (setq org-log-done 'time))
+  (setq org-log-done 'time)
+  :hook
+  (org-mode . (lambda ()
+		(setq buffer-face-mode-face '(:family "Sarasa Mono TC"))
+		(buffer-face-mode)))
+  )
 
 ;; Enable rich annotations using the Marginalia package
 (use-package marginalia
@@ -343,7 +349,8 @@
              :repo "konrad1977/pinerose-emacs")
   :after autothemer
   :config
-  (load-theme 'rose-pine t))
+  ;; (load-theme 'rose-pine t)
+  )
 
 (use-package agent-shell
   :ensure t
@@ -383,4 +390,15 @@
       (delete-frame)
       )))
 
-(global-set-key (kbd "M-s-<SPC>") 'my-launch-app)
+;; (global-set-key (kbd "M-s-<SPC>") 'my-launch-app)
+
+(use-package ghostel
+  :ensure t)
+
+(use-package visual-fill-column
+  :straight (visual-fill-column
+	     :type git
+	     :host codeberg
+	     :repo "joostkremers/visual-fill-column")
+  :ensure t
+  :config)
