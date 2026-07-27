@@ -1,8 +1,8 @@
 (defun restore-gc-cons-threshold ()
-  (setq gc-cons-threshold (* 128 1024 1024)
+  (setopt gc-cons-threshold (* 128 1024 1024)
 	gc-cons-percentage 0.1))
 (setenv "LSP_USE_PLISTS" "true")
-(setq gc-cons-threshold most-positive-fixnum
+(setopt gc-cons-threshold most-positive-fixnum
       gc-cons-percentage 0.6)
+(setopt package-enable-at-startup nil)
 (add-hook 'emacs-startup-hook #'restore-gc-cons-threshold -99)
-(setq package-enable-at-startup nil)

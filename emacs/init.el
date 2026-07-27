@@ -14,7 +14,7 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-(setq straight-use-package-by-default t)
+(setopt straight-use-package-by-default t)
 (straight-use-package 'use-package)
 
 (setq locale-coding-system 'utf-8)
@@ -24,52 +24,60 @@
 (prefer-coding-system 'utf-8)
 
 (blink-cursor-mode 0)
-(setq initial-scratch-message "")
-(setq inhibit-startup-message t)
-(setq visible-bell t)
+(setopt initial-scratch-message "")
+(setopt inhibit-startup-message t)
+(setopt visible-bell t)
 
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (tooltip-mode -1)
+
+(load-theme 'modus-vivendi-tinted)
 (toggle-frame-fullscreen)
 
 (setopt use-short-answers t)
-(setq native-comp-async-report-warnings-errors nil)
-(setq warning-suppress-log-types '((files missing-lexbind-cookie)))
+(setopt native-comp-async-report-warnings-errors nil)
+(setopt warning-suppress-log-types '((files missing-lexbind-cookie)))
+(setopt delete-by-moving-to-trash t)
+(setopt vc-follow-symlinks t)
 
 (setq read-process-output-max (* 1024 1024))
 
-(defvar --custom-el (concat user-emacs-directory "custom.el"))
-(if (not (file-exists-p --custom-el))
-    (make-empty-file --custom-el))
-(setq custom-file --custom-el)
-(load --custom-el)
+(let ((custom-path (concat user-emacs-directory "custom.el")))
+  (unless (file-exists-p custom-path)
+    (make-empty-file custom-path))
+  (setopt custom-file custom-path)
+  (load custom-file))
 
-(defvar --backup-directory (concat user-emacs-directory "backups"))
-(if (not (file-exists-p --backup-directory))
-    (make-directory --backup-directory t))
-(setq backup-directory-alist `((".*" . ,--backup-directory)))
+(let ((backup-path (concat user-emacs-directory "backups")))
+  (unless (file-exists-p backup-path)
+    (make-directory backup-path t))
+  (setopt backup-directory-alist `((".*" . ,backup-path))))
 
-(defvar --autosave-directory (concat user-emacs-directory "autosaves"))
-(if (not (file-exists-p --autosave-directory))
-    (make-directory --autosave-directory t))
-(setq auto-save-file-name-transforms `((".*" ,--autosave-directory t)))
+(let ((autosave-directory (concat user-emacs-directory "autosaves")))
+  (unless (file-exists-p autosave-directory)
+    (make-directory autosave-directory t))
+  (setopt auto-save-file-name-transforms `((".*" ,autosave-directory t))))
 
 (set-face-attribute 'default nil
 		    :family "Sarasa Mono TC"
-		    :height 130
+		    :height 160
 		    :weight 'normal
 		    :width 'normal)
 
 (use-package exec-path-from-shell
+  :if (or (memq window-system '(mac ns x pgtk))
+	  (daemonp))
   :config
-  (dolist (var '("LC_CTYPE" "NIX_PROFILES" "NIX_SSL_CERT_FILE" "__NIX_DARWIN_SET_ENVIRONMENT_DONE" "LSP_USE_PLISTS" "NIX_PATH"))
+  (dolist (var '("LC_CTYPE"
+		 "NIX_PROFILES"
+		 "NIX_SSL_CERT_FILE"
+		 "__NIX_DARWIN_SET_ENVIRONMENT_DONE"
+		 "LSP_USE_PLISTS"
+		 "NIX_PATH"))
     (add-to-list 'exec-path-from-shell-variables var))
-  (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize))
-  (when (daemonp)
-    (exec-path-from-shell-initialize)))
+  (exec-path-from-shell-initialize))
 
 (use-package ligature
   :config
@@ -101,16 +109,16 @@
   (magit-git-executable "/etc/profiles/per-user/jack/bin/git"))
 
 (use-package org
-  :config
-  (global-set-key (kbd "C-c l") #'org-store-link)
-  (global-set-key (kbd "C-c a") #'org-agenda)
-  (global-set-key (kbd "C-c c") #'org-capture)
-  (setq org-log-done 'time)
+  :custom
+  (org-log-done 'time)
+  :bind
+  ("C-c l" . org-store-link)
+  ("C-c a" . org-agenda)
+  ("C-c c" . org-capture)
   :hook
   (org-mode . (lambda ()
-		(setq buffer-face-mode-face '(:family "Sarasa Mono TC"))
-		(buffer-face-mode)))
-  )
+		(setopt buqffer-face-mode-face '(:family "Sarasa Mono TC"))
+		(buffer-face-mode))))
 
 ;; Enable rich annotations using the Marginalia package
 (use-package marginalia
@@ -147,13 +155,15 @@
 
 ;; Optionally use the `orderless' completion style.
 (use-package orderless
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles partial-completion))))
+  (completion-category-defaults nil)
   :init
   ;; Configure a custom style dispatcher (see the Consult wiki)
   ;; (setq orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch)
   ;;       orderless-component-separator #'orderless-escapable-split-on-space)
-  (setq completion-styles '(orderless basic)
-	completion-category-defaults nil
-	completion-category-overrides '((file (styles partial-completion)))))
+  )
 
 (use-package corfu
   ;; Optional customizations
@@ -309,21 +319,26 @@
          ;; if you want which-key integration
          (lsp-mode . lsp-enable-which-key-integration)
 	 (lsp-completion-mode . my/lsp-mode-setup-completion))
-  :commands lsp)
-
-(with-eval-after-load 'lsp-mode
+  :config
   (lsp-register-client
     (make-lsp-client :new-connection (lsp-stdio-connection "nixd")
                      :major-modes '(nix-mode)
                      :priority 0
-                     :server-id 'nixd)))
+                     :server-id 'nixd))
+  :commands lsp)
 
 ;; optionally
-(use-package lsp-ui :commands lsp-ui-mode)
-(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+(use-package lsp-ui
+  :after lsp-mode
+  :commands lsp-ui-mode)
+
+(use-package lsp-treemacs
+  :after lsp-mode
+  :commands lsp-treemacs-errors-list)
 
 ;; optionally if you want to use debugger
-(use-package dap-mode)
+(use-package dap-mode
+  :after lsp-mode)
 ;; (use-package dap-LANGUAGE) to load the adapter dap for your language
 
 ;; optional if you want which-key integration
@@ -335,29 +350,28 @@
   :config
   (setq inferior-lisp-program "/etc/profiles/per-user/jack/bin/clisp")
   (slime-setup '(slime-fancy slime-quicklisp slime-asdf slime-mrepl))
-  )
+  :hook (common-lisp-mode . slime))
 
-(use-package rainbow-delimiters)
-(use-package cider)
-(use-package paredit)
-(use-package vue-mode)
-(use-package autothemer)
-(use-package rose-pine-theme
-  :straight (rose-pine-theme
-             :type git
-             :host github
-             :repo "konrad1977/pinerose-emacs")
-  :after autothemer
+(use-package rainbow-delimiters
+  :hook (elisp-mode . rainbow-delimiters-mode))
+(use-package cider
+  :hook (clojure-mode . cider))
+(use-package paredit
+  :hook (clojure-mode . paredit))
+(use-package vue-mode
+  :mode "\\.vue\\'")
+
+(use-package ghostel
+  :commands ghostel)
+
+(use-package visual-fill-column
+  :commands visual-fill-column-mode
   :config
-  ;; (load-theme 'rose-pine t)
-  )
-
-(use-package agent-shell
-  :ensure t
-  :config
-  (setq agent-shell-google-authentication
-      (agent-shell-google-make-authentication :login t)))
-
+  (setq visual-fill-column-center-text t)
+  :straight (visual-fill-column
+	     :type git
+	     :host codeberg
+	     :repo "joostkremers/visual-fill-column"))
 
 (defun my-darwin-rebuild ()
   "Async Call darwin rebuild"
@@ -389,16 +403,4 @@
 	    (start-process "launcher" nil "open" "-a" user-choice)))
       (delete-frame)
       )))
-
 ;; (global-set-key (kbd "M-s-<SPC>") 'my-launch-app)
-
-(use-package ghostel
-  :ensure t)
-
-(use-package visual-fill-column
-  :straight (visual-fill-column
-	     :type git
-	     :host codeberg
-	     :repo "joostkremers/visual-fill-column")
-  :ensure t
-  :config)

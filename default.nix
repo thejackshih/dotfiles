@@ -146,7 +146,7 @@ sudo -u ${my-username} /System/Library/PrivateFrameworks/SystemAdministration.fr
     brews = [];
     casks = [
       "1password"
-      # "adobe-digital-editions"
+      "adobe-digital-editions"
       "calibre"
       "multiviewer"
       "surfshark"
