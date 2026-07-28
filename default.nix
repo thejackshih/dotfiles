@@ -18,7 +18,9 @@ in
 
   nix = {
     package = pkgs.lixPackageSets.latest.lix;
-    channel.enable = false;
+    channel = {
+      enable = false;
+    };
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
@@ -274,7 +276,9 @@ in
             enable = true;
             enableBashIntegration = true;
             enableZshIntegration = true;
-            nix-direnv.enable = true;
+            nix-direnv = {
+              enable = true;
+            };
           };
         };
       };
