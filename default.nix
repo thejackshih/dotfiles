@@ -11,6 +11,9 @@ in
   nixpkgs = {
     source = sources.nixpkgs;
     overlays = [emacs-overlay];
+    config = {
+      allowUnfree = true;
+    };
   };
 
   nix = {
@@ -127,12 +130,16 @@ in
       enableKeyMapping = true;
       remapCapsLockToControl = true;
     };
+    activationScripts = {
+      postActivation = {
+        # run activateSettings -u as user to apply keyboard shortcut change without logout
+        # ref: https://zameermanji.com/blog/2021/6/8/applying-com-apple-symbolichotkeys-changes-instantaneously/
+        text = ''
+          sudo -u ${my-username} /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+        '';
+      };
+    };
   };
-  # run activateSettings -u as user to apply keyboard shortcut change without logout
-  # ref: https://zameermanji.com/blog/2021/6/8/applying-com-apple-symbolichotkeys-changes-instantaneously/
-  system.activationScripts.postActivation.text = ''
-sudo -u ${my-username} /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
-'';
 
   homebrew = {
     enable = true;
@@ -155,6 +162,7 @@ sudo -u ${my-username} /System/Library/PrivateFrameworks/SystemAdministration.fr
       "betterdisplay"
       "nvidia-geforce-now"
       "microsoft-edge"
+      "antigravity"
     ];
   };
 
@@ -174,96 +182,100 @@ sudo -u ${my-username} /System/Library/PrivateFrameworks/SystemAdministration.fr
   };
 
   users = {
-    users.${my-username} = {
-      name = my-username;
-      home = "/Users/${my-username}";
+    users = {
+      ${my-username} = {
+        name = my-username;
+        home = "/Users/${my-username}";
+      };
     };
   };
 
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
-    users.jack = { config, lib, pkgs, ... }: {
-      home = {
-        stateVersion = "26.11";
-        packages = with pkgs; [
-          coreutils
-          # (lib.hiPrio pkgs.uutils-coreutils-noprefix) # `lib.hiPrio` is used to avoid potential conflict with `coreutils-full` (also see https://discourse.nixos.org/t/how-to-use-uutils-coreutils-instead-of-the-builtin-coreutils/8904/15?u=malix)
-          emacs
-          npins
-          gemini-cli
-          nixd
-          nix-search-cli
-          gcc
-        ];
-        file = {
-          emacs-early-init = {
-            enable = true;
-            source = config.lib.file.mkOutOfStoreSymlink "${builtins.toString ./. + "/emacs/early-init.el"}";
-            target = ".emacs.d/early-init.el";
-          };
-          emacs-init = {
-            enable = true;
-            source = config.lib.file.mkOutOfStoreSymlink "${builtins.toString ./. + "/emacs/init.el"}";
-            target = ".emacs.d/init.el";
-          };
-        };
-      };
-
-      services = {
-        emacs = {
-          enable = false;
-        };
-      };
-
-      programs = {
-        git = {
-          enable = true;
-          settings = {
-            user = {
-              email = "randomdize@gmail.com";
-              name = "Jack Shih";
+    users = {
+      ${my-username} = { config, lib, pkgs, ... }: {
+        home = {
+          stateVersion = "26.11";
+          packages = with pkgs; [
+            coreutils
+            # (lib.hiPrio pkgs.uutils-coreutils-noprefix) # `lib.hiPrio` is used to avoid potential conflict with `coreutils-full` (also see https://discourse.nixos.org/t/how-to-use-uutils-coreutils-instead-of-the-builtin-coreutils/8904/15?u=malix)
+            emacs
+            npins
+            nixd
+            nix-search-cli
+            gcc
+            antigravity-cli
+          ];
+          file = {
+            emacs-early-init = {
+              enable = true;
+              source = config.lib.file.mkOutOfStoreSymlink "${builtins.toString ./. + "/emacs/early-init.el"}";
+              target = ".emacs.d/early-init.el";
+            };
+            emacs-init = {
+              enable = true;
+              source = config.lib.file.mkOutOfStoreSymlink "${builtins.toString ./. + "/emacs/init.el"}";
+              target = ".emacs.d/init.el";
             };
           };
         };
-        bash = {
-          enable = true;
-          bashrcExtra =
-            ''
-              export LC_ALL="en_US.UTF-8"
-              export LC_CTYPE="en_US.UTF-8"
-              export LANG="en_US.UTF-8"
-            '';
-          shellAliases = lib.mkMerge [
-            {
-              reset-launchpad = "rm $(getconf DARWIN_USER_DIR)com.apple.dock.launchpad/db/*;killall Dock";
-            }
-            (lib.mkIf config.services.emacs.enable {
-              restart-emacs = "launchctl kickstart -k gui/$(id -u)/org.nix-community.home.emacs";
-            })
-          ];
+
+        services = {
+          emacs = {
+            enable = false;
+          };
         };
-        zsh = {
-          enable = true;
-          envExtra =
-            ''
-              export LANG="en_US.UTF-8"
-              export LC_CTYPE="en_US.UTF-8"
-            '';
-          shellAliases = lib.mkMerge [
-            {
-              reset-launchpad = "rm $(getconf DARWIN_USER_DIR)com.apple.dock.launchpad/db/*;killall Dock";
-            }
-            (lib.mkIf config.services.emacs.enable {
-              restart-emacs = "launchctl kickstart -k gui/$(id -u)/org.nix-community.home.emacs";
-            })
-          ];
-        };
-        direnv = {
-          enable = true;
-          enableBashIntegration = true;
-          enableZshIntegration = true;
-          nix-direnv.enable = true;
+
+        programs = {
+          git = {
+            enable = true;
+            settings = {
+              user = {
+                email = "randomdize@gmail.com";
+                name = "Jack Shih";
+              };
+            };
+          };
+          bash = {
+            enable = true;
+            bashrcExtra =
+              ''
+                export LC_ALL="en_US.UTF-8"
+                export LC_CTYPE="en_US.UTF-8"
+                export LANG="en_US.UTF-8"
+                '';
+            shellAliases = lib.mkMerge [
+              {
+                reset-launchpad = "rm $(getconf DARWIN_USER_DIR)com.apple.dock.launchpad/db/*;killall Dock";
+              }
+              (lib.mkIf config.services.emacs.enable {
+                restart-emacs = "launchctl kickstart -k gui/$(id -u)/org.nix-community.home.emacs";
+              })
+            ];
+          };
+          zsh = {
+            enable = true;
+            envExtra =
+              ''
+                export LANG="en_US.UTF-8"
+                export LC_CTYPE="en_US.UTF-8"
+                '';
+            shellAliases = lib.mkMerge [
+              {
+                reset-launchpad = "rm $(getconf DARWIN_USER_DIR)com.apple.dock.launchpad/db/*;killall Dock";
+              }
+              (lib.mkIf config.services.emacs.enable {
+                restart-emacs = "launchctl kickstart -k gui/$(id -u)/org.nix-community.home.emacs";
+              })
+            ];
+          };
+          direnv = {
+            enable = true;
+            enableBashIntegration = true;
+            enableZshIntegration = true;
+            nix-direnv.enable = true;
+          };
         };
       };
     };
