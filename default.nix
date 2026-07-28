@@ -185,7 +185,7 @@ in
 
   users = {
     users = {
-      ${my-username} = {
+      "${my-username}" = {
         name = my-username;
         home = "/Users/${my-username}";
       };
@@ -196,7 +196,7 @@ in
     useGlobalPkgs = true;
     useUserPackages = true;
     users = {
-      ${my-username} = { config, lib, pkgs, ... }: {
+      "${my-username}" = { config, lib, pkgs, ... }: {
         home = {
           stateVersion = "26.11";
           packages = with pkgs; [
