@@ -37,6 +37,7 @@
 (toggle-frame-fullscreen)
 
 (setopt use-short-answers t)
+(setopt use-dialog-box nil)
 (setopt native-comp-async-report-warnings-errors nil)
 (setopt warning-suppress-log-types '((files missing-lexbind-cookie)))
 (setopt delete-by-moving-to-trash t)
