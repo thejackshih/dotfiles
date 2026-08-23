@@ -62,47 +62,46 @@
   (setopt auto-save-file-name-transforms `((".*" ,autosave-directory t))))
 
 (set-face-attribute 'default nil
-		    :family "Sarasa Mono TC"
-		    :height 160
-		    :weight 'normal
-		    :width 'normal)
+                    :family "Sarasa Mono TC"
+                    :height 160
+                    :weight 'normal
+                    :width 'normal)
 
 (use-package exec-path-from-shell
   :if (or (memq window-system '(mac ns x pgtk))
-	  (daemonp))
+          (daemonp))
   :config
   (dolist (var '("LC_CTYPE"
-		 "NIX_PROFILES"
-		 "NIX_SSL_CERT_FILE"
-		 "__NIX_DARWIN_SET_ENVIRONMENT_DONE"
-		 "LSP_USE_PLISTS"
-		 "NIX_PATH"))
+                 "NIX_PROFILES"
+                 "NIX_SSL_CERT_FILE"
+                 "__NIX_DARWIN_SET_ENVIRONMENT_DONE"
+                 "LSP_USE_PLISTS"
+                 "NIX_PATH"))
     (add-to-list 'exec-path-from-shell-variables var))
   (exec-path-from-shell-initialize))
 
 (use-package ligature
   :config
   (ligature-set-ligatures 'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
-				       ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
-				       "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
-				       "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
-				       "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
-				       "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
-				       "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
-				       "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
-				       ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
-				       "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
-				       "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
-				       "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
-				       "\\\\" "://"))
+                                       ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
+                                       "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
+                                       "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
+                                       "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
+                                       "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
+                                       "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
+                                       "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
+                                       ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
+                                       "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
+                                       "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
+                                       "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
+                                       "\\\\" "://"))
   (global-ligature-mode t))
 
 (use-package nix-mode
   :mode "\\.nix\\'")
 
 (use-package envrc
-  :config
-  (envrc-global-mode))
+  :hook (after-init . envrc-global-mode))
 
 (use-package magit
   :bind ("C-x g" . magit-status)
@@ -118,8 +117,8 @@
   ("C-c c" . org-capture)
   :hook
   (org-mode . (lambda ()
-		(setopt buqffer-face-mode-face '(:family "Sarasa Mono TC"))
-		(buffer-face-mode))))
+                (setopt buqffer-face-mode-face '(:family "Sarasa Mono TC"))
+                (buffer-face-mode))))
 
 ;; Enable rich annotations using the Marginalia package
 (use-package marginalia
@@ -127,7 +126,7 @@
   ;; available in the *Completions* buffer, add it to the
   ;; `completion-list-mode-map'.
   :bind (:map minibuffer-local-map
-	      ("M-A" . marginalia-cycle))
+              ("M-A" . marginalia-cycle))
 
   ;; The :init section is always executed.
   :init
@@ -295,7 +294,7 @@
   ;; Optionally make narrowing help available in the minibuffer.
   ;; You may want to use `embark-prefix-help-command' or which-key instead.
   ;; (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help)
-)
+  )
 
 (use-package envrc
   :config
@@ -315,17 +314,17 @@
           '(orderless))) ;; Configure orderless
   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
          ;; (python-ts-mode . lsp)
-	 ;; (go-ts-mode . lsp)
-	 ;; (nix-mode . lsp)
+         ;; (go-ts-mode . lsp)
+         ;; (nix-mode . lsp)
          ;; if you want which-key integration
          (lsp-mode . lsp-enable-which-key-integration)
-	 (lsp-completion-mode . my/lsp-mode-setup-completion))
+         (lsp-completion-mode . my/lsp-mode-setup-completion))
   :config
   (lsp-register-client
-    (make-lsp-client :new-connection (lsp-stdio-connection "nixd")
-                     :major-modes '(nix-mode)
-                     :priority 0
-                     :server-id 'nixd))
+   (make-lsp-client :new-connection (lsp-stdio-connection "nixd")
+                    :major-modes '(nix-mode)
+                    :priority 0
+                    :server-id 'nixd))
   :commands lsp)
 
 ;; optionally
@@ -344,8 +343,8 @@
 
 ;; optional if you want which-key integration
 (use-package which-key
-    :config
-    (which-key-mode))
+  :config
+  (which-key-mode))
 
 (use-package slime
   :config
@@ -355,11 +354,26 @@
 
 (use-package rainbow-delimiters
   :hook (elisp-mode . rainbow-delimiters-mode))
+
+(use-package clojure-mode
+  :mode (("\\.bb\\'" . clojure-mode)
+         ("\\.clj\\'" . clojure-mode)
+         ("\\.edn\\'" . clojure-mode)))
+
 (use-package cider
-  :hook (clojure-mode . cider))
+  :init
+  ;; (setq cider-preferred-build-tool 'clojure-cli)
+  :config
+  ;; Register Babashka as a known Clojure CLI tool
+  ;; (setq cider-clojure-cli-global-options ""
+  ;; cider-babashka-parameters "nrepl-server")
+  :hook (clojure-mode . cider-mode)
+  )
+
 (use-package paredit
-  :hook (clojure-mode . paredit))
-(use-package vue-mode
+  :hook (clojure-mode . paredit-mode))
+
+(use-package web-mode
   :mode "\\.vue\\'")
 
 (use-package ghostel
@@ -370,9 +384,9 @@
   :config
   (setq visual-fill-column-center-text t)
   :straight (visual-fill-column
-	     :type git
-	     :host codeberg
-	     :repo "joostkremers/visual-fill-column"))
+             :type git
+             :host codeberg
+             :repo "joostkremers/visual-fill-column"))
 
 (defun my-darwin-rebuild ()
   "Async Call darwin rebuild"
@@ -384,24 +398,116 @@
   (interactive)
   (progn
     (make-frame `((parent-frame . ,(selected-frame))
-		  (undecorated . t)
-		  (minibuffer . only)
-		  (left . ,(/ (- (frame-pixel-width (selected-frame)) (* 40 (frame-char-width))) 2))
-		  (top . 0)))
+                  (undecorated . t)
+                  (minibuffer . only)
+                  (left . ,(/ (- (frame-pixel-width (selected-frame)) (* 40 (frame-char-width))) 2))
+                  (top . 0)))
     (unwind-protect
-	(let* ((apps (append
-		      (directory-files "/Applications" nil ".app")
-		      (directory-files "~/Applications" nil ".app")
-		      (directory-files "/system/Applications" nil ".app")
-		      (directory-files "/system/Applications/Utilities" nil ".app")))
-	       (apps-without-extension (mapcar (lambda (x) (string-replace ".app" "" x)) apps))
-	       (vertico-count 30)
-	       (resize-mini-frames t)
-	       (max-mini-windows-height 0.8)
-	       (window-min-width 40)
-	       (user-choice (completing-read "Select a app:" apps-without-extension nil t)))
-	  (with-environment-variables (("__NIX_DARWIN_SET_ENVIRONMENT_DONE" ""))
-	    (start-process "launcher" nil "open" "-a" user-choice)))
+        (let* ((apps (append
+                      (directory-files "/Applications" nil ".app")
+                      (directory-files "~/Applications" nil ".app")
+                      (directory-files "/system/Applications" nil ".app")
+                      (directory-files "/system/Applications/Utilities" nil ".app")))
+               (apps-without-extension (mapcar (lambda (x) (string-replace ".app" "" x)) apps))
+               (vertico-count 30)
+               (resize-mini-frames t)
+               (max-mini-windows-height 0.8)
+               (window-min-width 40)
+               (user-choice (completing-read "Select a app:" apps-without-extension nil t)))
+          (with-environment-variables (("__NIX_DARWIN_SET_ENVIRONMENT_DONE" ""))
+            (start-process "launcher" nil "open" "-a" user-choice)))
       (delete-frame)
       )))
 ;; (global-set-key (kbd "M-s-<SPC>") 'my-launch-app)
+
+(use-package agent-shell
+  :ensure t
+  :config
+  ;; 1. ACP 執行命令與參數
+  (defcustom agent-shell-antigravity-acp-command
+    '("/Users/jack/agy-acp-server/agy_acp_server.par") ;; 或 '("agy" "--experimental-acp")
+    "Command and parameters for the Antigravity ACP client."
+    :type '(repeat string)
+    :group 'agent-shell)
+
+  ;; 2. 比照 gemini-cli：定義驗證配置產生器
+  (cl-defun agent-shell-antigravity-make-authentication (&key api-key login none)
+    "Create Antigravity authentication configuration."
+    (when (> (seq-count #'identity (list api-key login)) 1)
+      (error "Cannot specify multiple authentication methods - choose one"))
+    (unless (> (seq-count #'identity (list api-key login none)) 0)
+      (error "Must specify one of :api-key, :login, or :none"))
+    (cond
+     (api-key `((:api-key . ,api-key)))
+     (login `((:login . t)))
+     (none `((:none . t)))))
+
+  ;; 3. 比照 gemini-cli：預設使用 Google OAuth 登入 (:login t)
+  (defcustom agent-shell-antigravity-authentication
+    (agent-shell-antigravity-make-authentication :login t)
+    "Configuration for Antigravity authentication."
+    :type 'alist
+    :group 'agent-shell)
+
+  ;; 4. 取得 API Key 的輔助函式
+  (defun agent-shell-antigravity-key ()
+    "Get the Antigravity/Gemini API key."
+    (cond ((stringp (map-elt agent-shell-antigravity-authentication :api-key))
+           (map-elt agent-shell-antigravity-authentication :api-key))
+          ((functionp (map-elt agent-shell-antigravity-authentication :api-key))
+           (funcall (map-elt agent-shell-antigravity-authentication :api-key)))
+          (t nil)))
+
+  ;; 5. 建立 Client 時根據驗證動態設定環境變數
+  (cl-defun agent-shell-antigravity-make-client (&key buffer)
+    (unless buffer
+      (error "Missing required argument: :buffer"))
+    (let ((env (when-let ((key (agent-shell-antigravity-key)))
+                 (list (format "GEMINI_API_KEY=%s" key)))))
+      (agent-shell--make-acp-client
+       :command (car agent-shell-antigravity-acp-command)
+       :command-params (cdr agent-shell-antigravity-acp-command)
+       :environment-variables env
+       :context-buffer buffer)))
+
+  ;; 6. 比照 gemini-cli：構建完整 Agent Config (包含 :authenticate-request-maker)
+  (defun agent-shell-antigravity-make-config ()
+    "Create Antigravity agent configuration."
+    (agent-shell-make-agent-config
+     :identifier 'antigravity
+     :mode-line-name "Antigravity"
+     :buffer-name "Antigravity"
+     :shell-prompt "Antigravity> "
+     :shell-prompt-regexp "Antigravity> "
+     :icon-name "antigravity.png"
+     :needs-authentication (not (map-elt agent-shell-antigravity-authentication :none))
+     :authenticate-request-maker
+     (lambda ()
+       (cond
+        ((map-elt agent-shell-antigravity-authentication :api-key)
+         (acp-make-authenticate-request
+          :method-id "gemini-api-key"
+          :method '((id . "gemini-api-key")
+                    (name . "Use Gemini API key")
+                    (description . "Requires setting the `GEMINI_API_KEY` environment variable"))))
+        ((map-elt agent-shell-antigravity-authentication :none)
+         nil)
+        (t ;; 預設 :login -> 向 ACP Agent 發送 Google OAuth 登入請求
+         (acp-make-authenticate-request
+          :method-id "oauth-personal"
+          :method '((id . "oauth-personal")
+                    (name . "Log in with Google")
+                    (description . ""))))))
+     :client-maker (lambda (buffer)
+                     (agent-shell-antigravity-make-client :buffer buffer))
+     :install-instructions "See https://github.com/agentclientprotocol/registry/tree/main/antigravity-acp for installation."))
+
+  ;; 7. 啟動命令
+  (defun agent-shell-antigravity-start ()
+    "Start an interactive Antigravity agent shell."
+    (interactive)
+    (agent-shell--dwim :config (agent-shell-antigravity-make-config)
+                       :new-shell t))
+
+  ;; 8. 註冊到 M-x agent-shell 選單
+  (add-to-list 'agent-shell-agent-configs (agent-shell-antigravity-make-config)))

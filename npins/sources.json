@@ -8,9 +8,9 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "ddc68e352bb0ed829bf819058a8924b60e53d720",
+      "revision": "63cad05958ad638c0423b922f23db06d6edcc1a8",
       "url": null,
-      "hash": "sha256-Nx/jiIsqVSWThTfVUNyVD9NCb2T9uOolCcZ3qrrwzyM="
+      "hash": "sha256-UfD/d+QBbWxNBrDPrbrIZfsqaF+Wwyg71xwCQNoJkx0="
     },
     "home-manager": {
       "type": "Git",
@@ -20,9 +20,9 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "39411a8e12a5526d992e65bc7e3dc9a4414d6713",
+      "revision": "ec1a8fdf74ed3f276148ee106299a2ba0e65d51f",
       "url": null,
-      "hash": "sha256-iZrxHToDJWnvt+5LGAtvuQMTy1NZYlNEKbKaVtBJNcc="
+      "hash": "sha256-XL2qfqmocfsvuEGyomZg4nOZfkuSe8vZtrOX99I+b6I="
     },
     "nix-darwin": {
       "type": "Git",
@@ -32,16 +32,16 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "b4cccbd4bc299c1f71ae185b79c3cf99aa82805c",
+      "revision": "4cff07de74b50e64bdd68cd4e722ab5b6b35ee48",
       "url": null,
-      "hash": "sha256-EP9b9b+OXDxHBPefFwMYCIaLq0fn3UkmrbfzbLUT7kQ="
+      "hash": "sha256-oQFip+v0luP8NIxJzmiW4Wu8bILsbFWom5l0zonl8hQ="
     },
     "nixpkgs": {
       "type": "Channel",
       "name": "nixpkgs-unstable",
       "artifact": "nixexprs.tar.xz",
-      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-26.11pre1036836.20535e48e12c/nixexprs.tar.xz",
-      "hash": "sha256-eiNlOqzMSGC+sKwgrhkBK/Mn4n717NV1DEfJqHBVhgg="
+      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-26.11pre1058520.391b592eb448/nixexprs.tar.xz",
+      "hash": "sha256-8Ou9WyfCXV3MdC/pQcawzeR8EnxRsPMhLoRDZG1AWik="
     }
   },
   "version": 8
