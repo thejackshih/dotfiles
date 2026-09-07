@@ -62,8 +62,8 @@
   (setopt auto-save-file-name-transforms `((".*" ,autosave-directory t))))
 
 (set-face-attribute 'default nil
-                    :family "Sarasa Mono TC"
-                    :height 160
+		    :family "Martian Mono"
+                    :height 130
                     :weight 'normal
                     :width 'normal)
 
@@ -117,7 +117,7 @@
   ("C-c c" . org-capture)
   :hook
   (org-mode . (lambda ()
-                (setopt buqffer-face-mode-face '(:family "Sarasa Mono TC"))
+                (setopt buffer-face-mode-face '(:family "Sarasa Mono TC"))
                 (buffer-face-mode))))
 
 ;; Enable rich annotations using the Marginalia package
@@ -357,8 +357,7 @@
 
 (use-package clojure-mode
   :mode (("\\.bb\\'" . clojure-mode)
-         ("\\.clj\\'" . clojure-mode)
-         ("\\.edn\\'" . clojure-mode)))
+         ("\\.clj\\'" . clojure-mode)))
 
 (use-package cider
   :init
@@ -423,91 +422,6 @@
 (use-package agent-shell
   :ensure t
   :config
-  ;; 1. ACP 執行命令與參數
-  (defcustom agent-shell-antigravity-acp-command
-    '("/Users/jack/agy-acp-server/agy_acp_server.par") ;; 或 '("agy" "--experimental-acp")
-    "Command and parameters for the Antigravity ACP client."
-    :type '(repeat string)
-    :group 'agent-shell)
-
-  ;; 2. 比照 gemini-cli：定義驗證配置產生器
-  (cl-defun agent-shell-antigravity-make-authentication (&key api-key login none)
-    "Create Antigravity authentication configuration."
-    (when (> (seq-count #'identity (list api-key login)) 1)
-      (error "Cannot specify multiple authentication methods - choose one"))
-    (unless (> (seq-count #'identity (list api-key login none)) 0)
-      (error "Must specify one of :api-key, :login, or :none"))
-    (cond
-     (api-key `((:api-key . ,api-key)))
-     (login `((:login . t)))
-     (none `((:none . t)))))
-
-  ;; 3. 比照 gemini-cli：預設使用 Google OAuth 登入 (:login t)
-  (defcustom agent-shell-antigravity-authentication
-    (agent-shell-antigravity-make-authentication :login t)
-    "Configuration for Antigravity authentication."
-    :type 'alist
-    :group 'agent-shell)
-
-  ;; 4. 取得 API Key 的輔助函式
-  (defun agent-shell-antigravity-key ()
-    "Get the Antigravity/Gemini API key."
-    (cond ((stringp (map-elt agent-shell-antigravity-authentication :api-key))
-           (map-elt agent-shell-antigravity-authentication :api-key))
-          ((functionp (map-elt agent-shell-antigravity-authentication :api-key))
-           (funcall (map-elt agent-shell-antigravity-authentication :api-key)))
-          (t nil)))
-
-  ;; 5. 建立 Client 時根據驗證動態設定環境變數
-  (cl-defun agent-shell-antigravity-make-client (&key buffer)
-    (unless buffer
-      (error "Missing required argument: :buffer"))
-    (let ((env (when-let ((key (agent-shell-antigravity-key)))
-                 (list (format "GEMINI_API_KEY=%s" key)))))
-      (agent-shell--make-acp-client
-       :command (car agent-shell-antigravity-acp-command)
-       :command-params (cdr agent-shell-antigravity-acp-command)
-       :environment-variables env
-       :context-buffer buffer)))
-
-  ;; 6. 比照 gemini-cli：構建完整 Agent Config (包含 :authenticate-request-maker)
-  (defun agent-shell-antigravity-make-config ()
-    "Create Antigravity agent configuration."
-    (agent-shell-make-agent-config
-     :identifier 'antigravity
-     :mode-line-name "Antigravity"
-     :buffer-name "Antigravity"
-     :shell-prompt "Antigravity> "
-     :shell-prompt-regexp "Antigravity> "
-     :icon-name "antigravity.png"
-     :needs-authentication (not (map-elt agent-shell-antigravity-authentication :none))
-     :authenticate-request-maker
-     (lambda ()
-       (cond
-        ((map-elt agent-shell-antigravity-authentication :api-key)
-         (acp-make-authenticate-request
-          :method-id "gemini-api-key"
-          :method '((id . "gemini-api-key")
-                    (name . "Use Gemini API key")
-                    (description . "Requires setting the `GEMINI_API_KEY` environment variable"))))
-        ((map-elt agent-shell-antigravity-authentication :none)
-         nil)
-        (t ;; 預設 :login -> 向 ACP Agent 發送 Google OAuth 登入請求
-         (acp-make-authenticate-request
-          :method-id "oauth-personal"
-          :method '((id . "oauth-personal")
-                    (name . "Log in with Google")
-                    (description . ""))))))
-     :client-maker (lambda (buffer)
-                     (agent-shell-antigravity-make-client :buffer buffer))
-     :install-instructions "See https://github.com/agentclientprotocol/registry/tree/main/antigravity-acp for installation."))
-
-  ;; 7. 啟動命令
-  (defun agent-shell-antigravity-start ()
-    "Start an interactive Antigravity agent shell."
-    (interactive)
-    (agent-shell--dwim :config (agent-shell-antigravity-make-config)
-                       :new-shell t))
-
-  ;; 8. 註冊到 M-x agent-shell 選單
-  (add-to-list 'agent-shell-agent-configs (agent-shell-antigravity-make-config)))
+  (setopt agent-shell-antigravity-acp-command '("/Users/jack/agy-acp-server/agy_acp_server.par"))
+  (setq agent-shell-antigravity-authentication
+	(agent-shell-antigravity-make-authentication :login t)))

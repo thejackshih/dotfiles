@@ -1,5 +1,4 @@
 #+TITLE: Environment
-#+STARTUP: content
 
 This is my config
 

@@ -171,6 +171,7 @@ in
   fonts = {
     packages = with pkgs;[
       sarasa-gothic
+      martian-mono
     ];
   };
 
@@ -202,7 +203,7 @@ in
           packages = with pkgs; [
             coreutils
             # (lib.hiPrio pkgs.uutils-coreutils-noprefix) # `lib.hiPrio` is used to avoid potential conflict with `coreutils-full` (also see https://discourse.nixos.org/t/how-to-use-uutils-coreutils-instead-of-the-builtin-coreutils/8904/15?u=malix)
-            emacs
+            emacs31
             npins
             nixd
             nix-search-cli
