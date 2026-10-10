@@ -18,6 +18,12 @@ in
 
   nix = {
     package = pkgs.lixPackageSets.latest.lix;
+    settings = {
+      substituters = [
+        # "https://cache.nixos.org"
+        # "https://nix-community.cachix.org"        
+      ];
+    };
     channel = {
       enable = false;
     };
@@ -126,6 +132,11 @@ in
             };
           };
         };
+        "com.apple.spotlight" = {
+          EnabledPreferenceRules = [
+            "System.iphoneApps"
+          ];
+        };
       };
     };
     keyboard = {
@@ -145,9 +156,18 @@ in
 
   homebrew = {
     enable = true;
+    enableZshIntegration = true;
+    enableBashIntegration = true;
     onActivation = {
       autoUpdate = true;
+      upgrade = true;
       cleanup = "none";
+      extraFlags = [
+        "--verbose"
+      ];
+    };
+    global = {
+      autoUpdate = false;
     };
     taps = [
       "d12frosted/emacs-plus"
@@ -163,7 +183,7 @@ in
       "obs"
       "betterdisplay"
       "nvidia-geforce-now"
-      "microsoft-edge"
+      # "microsoft-edge"
       "antigravity"
     ];
   };
@@ -172,6 +192,14 @@ in
     packages = with pkgs;[
       sarasa-gothic
       martian-mono
+      ibm-plex
+      geist-font
+      _0xproto
+      _0xpropo
+      fira
+      fira-code
+      victor-mono
+      plemoljp
     ];
   };
 
@@ -203,11 +231,10 @@ in
           packages = with pkgs; [
             coreutils
             # (lib.hiPrio pkgs.uutils-coreutils-noprefix) # `lib.hiPrio` is used to avoid potential conflict with `coreutils-full` (also see https://discourse.nixos.org/t/how-to-use-uutils-coreutils-instead-of-the-builtin-coreutils/8904/15?u=malix)
-            emacs31
+            emacs
             npins
             nixd
             nix-search-cli
-            gcc
             antigravity-cli
           ];
           file = {

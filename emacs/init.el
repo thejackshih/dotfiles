@@ -62,7 +62,13 @@
   (setopt auto-save-file-name-transforms `((".*" ,autosave-directory t))))
 
 (set-face-attribute 'default nil
-		    :family "Martian Mono"
+		    ;; :family "Sarasa Mono TC"
+		    ;; :family "Martian Mono"
+		    ;; :family "Ibm Plex Mono"
+		    ;; :family "0xProto"
+		    ;; :family "fira mono"
+		    :family "fira code"
+		    ;; :family "victor mono"
                     :height 130
                     :weight 'normal
                     :width 'normal)
